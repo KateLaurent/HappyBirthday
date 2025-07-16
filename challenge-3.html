@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THẦN THIẾP ĐÃ DẠI DỘT!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.93);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 2px solid #ffb6c1;
+        }
+        h1 {
+            color: #ff4757;
+            font-size: 2.3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .meme-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .meme-img {
+            max-width: 45%;
+            border-radius: 10px;
+            border: 3px solid #ffb6c1;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .meme-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+        .highlight {
+            background-color: #fff2cc;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .btn {
+            display: block;
+            width: fit-content;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #ff7675, #e84393);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(232, 67, 147, 0.4);
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(232, 67, 147, 0.5);
+        }
+        .signature {
+            text-align: right;
+            font-style: italic;
+            margin-top: 40px;
+            color: #666;
+        }
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>THẦN THIẾP XIN CHỊU TỘI!</h1>
+        
+        <div class="meme-container">
+            <img src="/FishBirthday/images/160a8494-8ea6-4b2f-814b-1ab175f1ab68.jpg" alt="Meme buồn 1" class="meme-img" onclick="playSound('sad1')">
+            <img src="/FishBirthday/images/8edfe21a-1592-4689-a9a9-1c4f3cab9aa4.jpg" alt="Meme buồn 2" class="meme-img" onclick="playSound('sad2')">
+            <img src="/FishBirthday/images/a84b9109-ed81-4e9b-b5de-bf5af1fa1bf7.jpg" alt="Meme xin lỗi" class="meme-img" onclick="playSound('sorry')">
+            <img src="/FishBirthday/images/bc9ae7a5-b9fc-4192-95f0-1e00ccd3fe8d.jpg" alt="Meme hài" class="meme-img" onclick="playSound('funny')">
+        </div>
+        
+        <div class="content">
+            <p>Hoàng thượng ơi,</p>
+
+<p>Thiếp vốn định dâng lễ vật long trọng, đàng hoàng, xịn mịn không kém gì ngự thiện phòng dâng bánh trung thu loại xịn nhất. Nhưng ngặt nỗi mấy hôm nay thân thể thiếp nó như cá khô bị phơi ngược gió, lết còn không nổi, nói gì đến làm quà.</p>
+
+<p>Vậy nên... món quà này hiện giờ trông hơi... <em>xàm què</em>, chưa xứng tầm long nhan, mong Hoàng thượng đừng lôi đầu thiếp ra bêu trước cung nữ!</p>
+
+<p>Thiếp xin thề trên cái gối thêu rồng nơi long sàng rằng: sau này khi hồi phục, thiếp sẽ bù lại gấp mười, gấp trăm lần, thậm chí gấp nghìn lần nếu Hoàng thượng vẫn còn... <em>xài được</em>.</p>
+
+<p>Mãi yêu Hoàng thượng, dẫu có bị đày ra biên ải thiếp cũng nguyện theo!</p>
+
+        </div>
+        
+        <a href="challenges.html" class="btn">XIN HOÀNG THƯỢNG THA TỘI!</a>
+        
+        <div class="signature">
+            <p>Kính bút,</p>
+            <p><strong>Thần thiếp của Ngài</strong> ❤️</p>
+        </div>
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="sad1" src="https://www.myinstants.com/media/sounds/sad-violin.mp3"></audio>
+    <audio id="sad2" src="/FishBirthday/sounds/funny-background-music-no-copyright-happy-song-circus-swing-325382.mp3"></audio>
+    <audio id="sorry" src="https://www.myinstants.com/media/sounds/vine-boom.mp3"></audio>
+    <audio id="funny" src="https://www.myinstants.com/media/sounds/windows-xp-error-sound.mp3"></audio>
+    
+    <!-- Background music -->
+    <audio id="bgMusic" loop>
+        <source src="/FishBirthday/sounds/Đừng Bỏ Em Một Mình _ Danh Ca Lệ Thu _ Thu Âm Trước 1975 [VDmUuE0bBd0].mp3" type="audio/mpeg">
+    </audio>
+    
+    <div class="audio-control" onclick="toggleMusic()">
+        <span style="font-size: 1.5rem;">🎵</span>
+    </div>
+
+    <script>
+        // Play sound when clicking memes
+        function playSound(id) {
+            const audio = document.getElementById(id);
+            audio.currentTime = 0;
+            audio.play();
+        }
+        
+        // Background music control
+        const bgMusic = document.getElementById('bgMusic');
+        let isMusicPlaying = false;
+        
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play();
+                isMusicPlaying = true;
+            }
+        }
+        
+        // Auto play music after user interaction
+        document.addEventListener('click', function() {
+            if (!isMusicPlaying) {
+                bgMusic.play();
+                isMusicPlaying = true;
+            }
+        }, { once: true });
+        
+        // Button hover effect
+        const btn = document.querySelector('.btn');
+        btn.addEventListener('mouseover', function() {
+            this.textContent = "XIN ĐỪNG PHẠT THẦN THIẾP!";
+        });
+        btn.addEventListener('mouseout', function() {
+            this.textContent = "XIN HOÀNG THƯỢNG THA TỘI!";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thử Thách Tình Yêu Ma Quái</title>
+    <style>
+        :root {
+            --purple-dark: #2a0a2a;
+            --purple-medium: #4B0082;
+            --purple-light: #9932CC;
+            --pink-neon: #FF69B4;
+            --pink-light: #FFB6C1;
+            --cyan-neon: #00FFFF;
+        }
+        
+        body {
+            font-family: 'Creepster', 'Arial', cursive;
+            background-color: var(--purple-dark);
+            color: var(--pink-light);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 105, 180, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 20%);
+            text-align: center;
+            padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: url('https://i.imgur.com/ZYQ5zG3.png'), auto;
+        }
+
+        /* Nút quay lại */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: var(--purple-light);
+            color: white;
+            border: 2px solid var(--pink-neon);
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 0 0 10px var(--pink-neon);
+        }
+
+        .back-button:hover {
+            background-color: var(--pink-neon);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--pink-neon);
+        }
+
+        /* Tiêu đề */
+        h1 {
+            color: var(--pink-neon);
+            text-shadow: 
+                0 0 10px var(--pink-neon), 
+                0 0 20px var(--pink-neon),
+                0 0 30px var(--purple-light);
+            font-size: 3.5em;
+            margin-top: 40px;
+            letter-spacing: 3px;
+            animation: titleGlow 2s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 10px var(--pink-neon), 0 0 20px var(--pink-neon); }
+            100% { text-shadow: 0 0 15px var(--pink-neon), 0 0 30px var(--pink-neon), 0 0 45px var(--purple-light); }
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .progress-text {
+            color: var(--cyan-neon);
+            margin-bottom: 5px;
+            font-size: 1.2em;
+            text-shadow: 0 0 5px var(--cyan-neon);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            background-color: rgba(75, 0, 130, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--pink-neon), var(--purple-light));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+            position: relative;
+        }
+
+        .progress::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                            transparent, 
+                            rgba(255, 255, 255, 0.4), 
+                            transparent);
+            animation: progressShine 3s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Container câu hỏi */
+        .question-container {
+            background-color: rgba(42, 10, 42, 0.8);
+            border: 3px solid var(--purple-light);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px auto;
+            max-width: 650px;
+            box-shadow: 
+                0 0 20px var(--purple-light),
+                inset 0 0 10px rgba(255, 105, 180, 0.3);
+            display: none;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .question-container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.1) 0%, transparent 70%);
+            animation: rotateGradient 15s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateGradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .active {
+            display: block;
+            animation: 
+                fadeIn 1s ease-out,
+                floatQuestion 4s ease-in-out infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px) rotateX(20deg); }
+            to { opacity: 1; transform: translateY(0) rotateX(0); }
+        }
+
+        @keyframes floatQuestion {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Nội dung câu hỏi */
+        .question {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: var(--pink-light);
+            text-shadow: 0 0 8px var(--pink-neon);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .question::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan-neon), transparent);
+            animation: linePulse 2s infinite;
+        }
+
+        @keyframes linePulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Các lựa chọn */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 15px;
+            background-color: rgba(75, 0, 130, 0.7);
+            border: 2px solid var(--purple-light);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.4s;
+            font-size: 1.3em;
+            color: var(--pink-light);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .option::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 105, 180, 0.3), transparent);
+            transition: all 0.6s;
+            z-index: -1;
+        }
+
+        .option:hover {
+            background-color: rgba(153, 50, 204, 0.7);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 5px 15px rgba(255, 105, 180, 0.4),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        /* Hiệu ứng khi chọn đáp án */
+        .selected {
+            animation: optionSelected 0.5s forwards;
+        }
+
+        @keyframes optionSelected {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); box-shadow: 0 0 30px var(--pink-neon); }
+            100% { transform: scale(1); }
+        }
+
+        /* Kết quả sau khi chọn */
+        .response {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: var(--cyan-neon);
+            text-shadow: 0 0 8px var(--cyan-neon);
+            display: none;
+            animation: textGlow 1.5s infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { opacity: 0.8; text-shadow: 0 0 5px var(--cyan-neon); }
+            100% { opacity: 1; text-shadow: 0 0 15px var(--cyan-neon); }
+        }
+
+        /* Kết quả cuối cùng */
+        #result {
+            display: none;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(42, 10, 42, 0.9);
+            border: 3px dashed var(--pink-neon);
+            border-radius: 20px;
+            max-width: 700px;
+            box-shadow: 
+                0 0 30px var(--purple-light),
+                inset 0 0 20px rgba(255, 105, 180, 0.3);
+            animation: resultAppear 1.5s forwards;
+        }
+
+        @keyframes resultAppear {
+            from { opacity: 0; transform: scale(0.8) rotate(-5deg); }
+            to { opacity: 1; transform: scale(1) rotate(0); }
+        }
+
+        #result h2 {
+            color: var(--pink-neon);
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px var(--pink-neon);
+        }
+
+        #result p {
+            font-size: 1.4em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Nút nhận quà */
+        #gift-button {
+            display: none;
+            margin: 40px auto;
+            padding: 18px 35px;
+            background: linear-gradient(45deg, var(--pink-neon), var(--purple-light));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.6em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 
+                0 5px 25px var(--pink-neon),
+                0 0 15px var(--cyan-neon);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        #gift-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: all 0.6s;
+            z-index: -1;
+        }
+
+        #gift-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 8px 35px var(--pink-neon),
+                0 0 25px var(--cyan-neon);
+        }
+
+        #gift-button:hover::before {
+            left: 100%;
+        }
+
+        /* Hiệu ứng con ma */
+        .ghost {
+            position: fixed;
+            width: 70px;
+            height: 70px;
+            background-image: url('https://i.imgur.com/JQlE5GZ.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 100;
+            filter: drop-shadow(0 0 15px var(--cyan-neon));
+            transition: transform 0.2s;
+            animation: ghostFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes ghostFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(-15px) rotate(-5deg); }
+        }
+
+        /* Popup nhạc */
+        .music-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(42, 10, 42, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid var(--pink-neon);
+            box-shadow: 0 0 40px var(--purple-light);
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(5px);
+            animation: popupAppear 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            max-width: 80%;
+        }
+
+        @keyframes popupAppear {
+            from { opacity: 0; transform: translate(-50%, -60%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .music-popup p {
+            color: var(--pink-light);
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .music-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .music-btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 1.2em;
+            min-width: 120px;
+        }
+
+        #playMusic {
+            background: linear-gradient(45deg, var(--pink-neon), var(--purple-light));
+            color: white;
+            box-shadow: 0 0 15px var(--pink-neon);
+        }
+
+        #cancelMusic {
+            background: rgba(75, 0, 130, 0.7);
+            color: var(--pink-light);
+            border: 2px solid var(--purple-light);
+        }
+
+        .music-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--pink-neon);
+        }
+
+        /* Icon điều khiển nhạc */
+        .music-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--purple-light), var(--pink-neon));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 0 20px var(--pink-neon);
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--pink-neon); }
+            50% { transform: scale(1.1); box-shadow: 0 0 30px var(--cyan-neon); }
+        }
+
+        .music-control i {
+            color: white;
+            font-size: 1.8em;
+            transition: all 0.3s;
+        }
+
+        /* Hiệu ứng bong bóng */
+        .bubble {
+            position: absolute;
+            background: rgba(255, 105, 180, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            animation: floatBubble linear infinite;
+        }
+
+        @keyframes floatBubble {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Hiệu ứng sao băng */
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0;
+            animation: shootingStar linear infinite;
+        }
+
+        @keyframes shootingStar {
+            0% { transform: translate(0, 0); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translate(300px, 300px); opacity: 0; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='thuthach.html'">👻 Quay Lại</button>
+    
+    <h1>THỬ THÁCH TÌNH YÊU MA QUÁI</h1>
+    
+    <div class="progress-container">
+        <div class="progress-text">Tiến trình: <span id="progressPercent">0</span>%</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div>
+    
+    <!-- Câu hỏi 1 -->
+    <div id="question1" class="question-container active">
+        <div class="question">1. Anh có yêu em không?</div>
+        <div class="options">
+            <div class="option" onclick="selectOption(1, 1, 'Đương nhiên là vậy rồi, em biết mà 💖')">Có</div>
+            <div class="option" onclick="selectOption(1, 2, 'Tha cho anh hôm nay, mai mình nói chuyện sau 👻')">Không</div>
+            <div class="option" onclick="selectOption(1, 3, 'Con vợ anh oke?')">Em là con ma à?</div>
+        </div>
+        <div class="response" id="response1"></div>
+    </div>
+    
+    <!-- Câu hỏi 2 -->
+    <div id="question2" class="question-container">
+        <div class="question">2. Ngày hôm nay nhất định ăn đủ bữa và để bản thân thoải mái nhé!</div>
+        <div class="options">
+            <div class="option" onclick="selectOption(2, 1, 'Oke chồng ngoan 🍚👻')">Okela!</div>
+            <div class="option" onclick="selectOption(2, 2, 'Yeah méo có chuyện này đâu nhưng thêm vào cho hấp dẫn 💀')">Quên ăn vì nhớ em</div>
+        </div>
+        <div class="response" id="response2"></div>
+    </div>
+    
+    <!-- Câu hỏi 3 -->
+    <div id="question3" class="question-container">
+        <div class="question">3. Thấy em như thế nào?</div>
+        <div class="options">
+            <div class="option" onclick="selectOption(3, 1, 'O chòi ôi yêu chồng thế! 🐺🌹')">Dễ thương</div>
+            <div class="option" onclick="selectOption(3, 2, 'Z ó hỏ? 😱💨')">Đáng sợ</div>
+            <div class="option" onclick="selectOption(3, 3, 'Nhưng phim này có happy ending! 🎬❤️')">Bí ẩn như phim kinh dị</div>
+        </div>
+        <div class="response" id="response3"></div>
+    </div>
+    
+    <!-- Câu hỏi 4 -->
+    <div id="question4" class="question-container">
+        <div class="question">4. Nếu được chọn một con vật, anh sẽ chọn con nào để ở cạnh em?</div>
+        <div class="options">
+            <div class="option" onclick="selectOption(4, 1, 'Tạm chấp nhận, thật ra em có thành con gián cũng phải ở cạnh thôi 🦉💌')">Hồ ly tinh</div>
+            <div class="option" onclick="selectOption(4, 2, 'Cho vào cho vui 🦇')">Dơi</div>
+            <div class="option" onclick="selectOption(4, 3, 'Cùng đồng loại yêu cho dễ à?')">Cá</div>
+        </div>
+        <div class="response" id="response4"></div>
+    </div>
+    
+    <!-- Câu hỏi 5 -->
+    <div id="question5" class="question-container">
+        <div class="question">5. Có quên em không đó?</div>
+        <div class="options">
+            <div class="option" onclick="selectOption(5, 1, 'Tôi biết mà, sau hôm nay em sẽ ra đi huhu 👻💔')">Quên rồi</div>
+            <div class="option" onclick="selectOption(5, 2, 'Méo nhớ là thấy cảnh 💖')">Nhớ như in</div>
+        </div>
+        <div class="response" id="response5"></div>
+    </div>
+    
+    <!-- Câu hỏi 6 -->
+    <div id="question6" class="question-container">
+        <div class="question">6. Chắc chắn nhớ rõ em nhé?</div>
+        <div class="options">
+            <div class="option" onclick="selectOption(6, 1, 'Biết điều rồi đó chồng iu 👻❤️')">Đương nhiên</div>
+            <div class="option" onclick="selectOption(6, 2, 'Tí ra đầu đường gặp bạn nhé! ✨👻')">50/50</div>
+        </div>
+        <div class="response" id="response6"></div>
+    </div>
+    
+    <!-- Câu hỏi 7 -->
+    <div id="question7" class="question-container">
+        <div class="question">7. Em có yêu anh không?</div>
+        <div class="options">
+            <div class="option" onclick="selectOption(7, 1, 'Yeah tôi yêu bạn mà 💥🧟‍♀️💖')">Có</div>
+            <div class="option" onclick="selectOption(7, 2, 'Duam hay vậy quá ha, sau hôm nay coi chừng 💀❤️')">Không</div>
+            <div class="option" onclick="selectOption(7, 3, 'Chắc bạn đoán quá, để tôi tự khai, tôi yêu bạn oke 👻💘')">Anh đoán đi~</div>
+        </div>
+        <div class="response" id="response7"></div>
+    </div>
+    
+    <!-- Kết quả cuối cùng -->
+    <div id="result">
+        <h2>🎉 HOÀN THÀNH THỬ THÁCH! 🎉</h2>
+        <p>Chứng nhận: Couple ma quái đáng yêu nhất năm!</p>
+        <p>Phần thưởng đặc biệt đang chờ chồng...</p>
+    </div>
+    
+    <!-- Nút nhận quà -->
+    <button id="gift-button" onclick="window.location.href='nhanqua.html'">🎁 Nhận Quà Kinh Dị</button>
+
+    <!-- Popup nhạc -->
+    <div class="music-popup" id="musicPopup">
+        <p>🎵 Bật nhạc nền kinh dị cute cho trải nghiệm trọn vẹn nhé! 👻</p>
+        <div class="music-buttons">
+            <button class="music-btn" id="playMusic"><i class="fas fa-music"></i> Bật nhạc</button>
+            <button class="music-btn" id="cancelMusic"><i class="fas fa-times"></i> Để sau</button>
+        </div>
+    </div>
+
+    <!-- Icon điều khiển nhạc -->
+    <div class="music-control" id="musicControl">
+        <i class="fas fa-music"></i>
+    </div>
+
+    <!-- Audio element -->
+    <audio id="bgMusic" loop>
+        <source src="/FishBirthday/sounds/[No Copyright Free] Twinkle Twinkle Little Star _ Horror Music _ Royalty Free Music _ SCARY MUSIC [ed3joGUSA2g].mp3" type="audio/mpeg">
+        <!-- Thay bằng link nhạc của bạn -->
+    </audio>
+
+    <script>
+        // Biến toàn cục
+        let currentQuestion = 1;
+        const totalQuestions = 7;
+        const responses = [];
+        const ghostMessages = [
+            "Chết rồi yêu quá trời 💖",
+            "Ma béo sẽ kiểm tra anh đấy 🍚👻",
+            "Ma sói bông hồng của anh 🐺🌹",
+            "Cú đêm mang thư tình 🦉💌",
+            "Dù có thành zombie vẫn nhớ! 🧟‍♂️💖",
+            "Bóng ma trong tim anh 👻❤️",
+            "Trái tim zombie nổ tung vì yêu! 💥🧟‍♀️💖"
+        ];
+
+        // Khởi tạo trang
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hiển thị popup nhạc sau 1 giây
+            setTimeout(() => {
+                document.getElementById('musicPopup').style.display = 'block';
+            }, 1000);
+
+            // Xử lý nút bật nhạc
+            document.getElementById('playMusic').addEventListener('click', function() {
+                const bgMusic = document.getElementById('bgMusic');
+                bgMusic.play()
+                    .then(() => {
+                        document.getElementById('musicPopup').style.display = 'none';
+                        document.getElementById('musicControl').style.display = 'flex';
+                        createBubbles();
+                        createShootingStars();
+                    })
+                    .catch(e => console.log("Autoplay bị chặn:", e));
+            });
+
+            // Xử lý nút hủy nhạc
+            document.getElementById('cancelMusic').addEventListener('click', function() {
+                document.getElementById('musicPopup').style.display = 'none';
+            });
+
+            // Xử lý icon điều khiển nhạc
+            document.getElementById('musicControl').addEventListener('click', function() {
+                const bgMusic = document.getElementById('bgMusic');
+                const icon = this.querySelector('i');
+                
+                if (bgMusic.paused) {
+                    bgMusic.play();
+                    icon.classList.remove('fa-volume-mute');
+                    icon.classList.add('fa-music');
+                    this.style.animation = 'pulse 2s infinite';
+                } else {
+                    bgMusic.pause();
+                    icon.classList.remove('fa-music');
+                    icon.classList.add('fa-volume-mute');
+                    this.style.animation = 'none';
+                }
+            });
+
+            // Tạo hiệu ứng con ma
+            createGhost();
+
+            // Tạo hiệu ứng nền
+            createBubbles();
+            createShootingStars();
+        });
+
+        // Hàm chọn đáp án
+        function selectOption(questionNum, optionNum, response) {
+            const option = event.target;
+            const responseElement = document.getElementById(`response${questionNum}`);
+            
+            // Thêm class selected cho hiệu ứng
+            option.classList.add('selected');
+            
+            // Hiển thị response
+            responseElement.textContent = response;
+            responseElement.style.display = 'block';
+            responses[questionNum - 1] = response;
+            
+            // Cập nhật progress bar
+            updateProgress(questionNum);
+            
+            // Ẩn câu hỏi hiện tại sau 1.5 giây
+            setTimeout(() => {
+                document.getElementById(`question${questionNum}`).classList.remove('active');
+                
+                // Nếu còn câu hỏi, hiển thị câu tiếp theo
+                if (questionNum < totalQuestions) {
+                    currentQuestion++;
+                    document.getElementById(`question${currentQuestion}`).classList.add('active');
+                } else {
+                    // Nếu là câu cuối, hiển thị kết quả
+                    showFinalResult();
+                }
+            }, 1500);
+        }
+
+        // Cập nhật progress bar
+        function updateProgress(current) {
+            const percent = Math.round((current / totalQuestions) * 100);
+            document.getElementById('progress').style.width = `${percent}%`;
+            document.getElementById('progressPercent').textContent = percent;
+        }
+
+        // Hiển thị kết quả cuối cùng
+        function showFinalResult() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            
+            // Hiển thị nút nhận quà sau 2 giây
+            setTimeout(() => {
+                document.getElementById('gift-button').style.display = 'block';
+                createConfetti();
+            }, 2000);
+        }
+
+        // Tạo hiệu ứng con ma
+        function createGhost() {
+            const ghost = document.createElement('div');
+            ghost.className = 'ghost';
+            document.body.appendChild(ghost);
+            
+            document.addEventListener('mousemove', (e) => {
+                ghost.style.left = `${e.pageX + 15}px`;
+                ghost.style.top = `${e.pageY + 15}px`;
+                
+                // Hiệu ứng khi di chuột nhanh
+                const xSpeed = Math.abs(e.movementX);
+                const ySpeed = Math.abs(e.movementY);
+                const speed = Math.min(xSpeed + ySpeed, 30);
+                ghost.style.transform = `scale(${1 + speed/50}) rotate(${speed}deg)`;
+            });
+        }
+
+        // Tạo hiệu ứng bong bóng
+        function createBubbles() {
+            setInterval(() => {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                
+                // Kích thước ngẫu nhiên
+                const size = Math.random() * 30 + 10;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                
+                // Vị trí ngẫu nhiên
+                bubble.style.left = `${Math.random() * 100}vw`;
+                bubble.style.bottom = `-${size}px`;
+                
+                // Thời gian animation ngẫu nhiên
+                const duration = Math.random() * 15 + 10;
+                bubble.style.animationDuration = `${duration}s`;
+                
+                document.body.appendChild(bubble);
+                
+                // Tự động xóa sau khi animation kết thúc
+                setTimeout(() => {
+                    bubble.remove();
+                }, duration * 1000);
+            }, 300);
+        }
+
+        // Tạo hiệu ứng sao băng
+        function createShootingStars() {
+            setInterval(() => {
+                const star = document.createElement('div');
+                star.className = 'shooting-star';
+                
+                // Vị trí ngẫu nhiên
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                
+                // Thời gian animation
+                star.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                
+                document.body.appendChild(star);
+                
+                // Tự động xóa sau khi animation kết thúc
+                setTimeout(() => {
+                    star.remove();
+                }, 2000);
+            }, 1000);
+        }
+
+        // Tạo hiệu ứng confetti
+        function createConfetti() {
+            const colors = ['#FF69B4', '#9932CC', '#00FFFF', '#FFFFFF', '#FF00FF'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                // Hình dạng ngẫu nhiên
+                const shape = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.borderRadius = shape;
+                
+                // Màu sắc ngẫu nhiên
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Kích thước ngẫu nhiên
+                const size = Math.random() * 10 + 5;
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                
+                // Vị trí ngẫu nhiên
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.top = `-${size}px`;
+                
+                // Animation ngẫu nhiên
+                const animationDuration = Math.random() * 3 + 2;
+                confetti.style.animation = `confettiFall ${animationDuration}s linear forwards`;
+                confetti.style.animationDelay = `${Math.random() * 2}s`;
+                
+                // Xoay ngẫu nhiên
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                document.body.appendChild(confetti);
+                
+                // Tự động xóa sau khi animation kết thúc
+                setTimeout(() => {
+                    confetti.remove();
+                }, animationDuration * 1000);
+            }
+        }
+
+        // Thêm style cho confetti
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiFall {
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+            }
+            .confetti {
+                position: fixed;
+                z-index: 999;
+                pointer-events: none;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

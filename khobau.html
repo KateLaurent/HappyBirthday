@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kho Báu Tình Yêu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B8B;
+            --secondary: #6B5B95;
+            --accent: #FFB347;
+            --light: #FFF5F7;
+            --dark: #3D3D3D;
+            --success: #88D8B0;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 107, 139, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(107, 91, 149, 0.1) 0%, transparent 30%);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 65%, 
+                rgba(255, 107, 139, 0.05) 65%, 
+                rgba(255, 107, 139, 0.05) 70%, 
+                transparent 70%),
+                linear-gradient(-45deg, 
+                transparent 65%, 
+                rgba(107, 91, 149, 0.05) 65%, 
+                rgba(107, 91, 149, 0.05) 70%, 
+                transparent 70%);
+            background-size: 60px 60px;
+            z-index: -1;
+            opacity: 0.7;
+        }
+        
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3.2rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        h1::after {
+            content: "";
+            display: block;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+        
+        .lock-container {
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .code-input {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .code-input input {
+            width: 60px;
+            height: 70px;
+            font-size: 32px;
+            text-align: center;
+            background: var(--light);
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            color: var(--secondary);
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .code-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(255, 107, 139, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 0 auto;
+            font-weight: bold;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 10px 20px rgba(255, 107, 139, 0.3);
+        }
+        
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--accent), var(--primary));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(255, 107, 139, 0.4);
+        }
+        
+        .btn:hover::before {
+            opacity: 1;
+        }
+        
+        .hint {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 30px 0;
+            border-left: 4px solid var(--accent);
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        }
+        
+        .hint h3 {
+            color: var(--secondary);
+            margin-top: 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .hint h3::before {
+            content: "💡";
+            font-size: 1.5rem;
+        }
+        
+        .hint p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+            color: var(--dark);
+        }
+        
+        .hint p strong {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .hint p em {
+            color: var(--primary);
+            font-style: italic;
+            font-weight: 500;
+        }
+        
+        .treasure {
+            display: none;
+            margin-top: 40px;
+            animation: fadeIn 1.5s;
+        }
+        
+        .treasure h2 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .treasure p {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--secondary);
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+        }
+        
+        .gifts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .gift {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        .gift::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+        
+        .gift:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gift h3 {
+            color: var(--secondary);
+            font-size: 1.6rem;
+            margin-top: 0;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .gift h3::after {
+            content: "";
+            display: block;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            margin: 10px auto;
+            transition: width 0.3s;
+            border-radius: 3px;
+        }
+        
+        .gift:hover h3::after {
+            width: 80%;
+        }
+        
+        .gift p {
+            margin-bottom: 25px;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .gift-btn {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(255, 107, 139, 0.3);
+        }
+        
+        .gift-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 139, 0.4);
+        }
+        
+        .back-btn {
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Floating elements */
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .floating-element {
+            position: absolute;
+            opacity: 0.7;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        /* Music player */
+        .music-player {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .music-btn {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 107, 139, 0.3);
+        }
+        
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        #song-title {
+            font-weight: 600;
+            color: var(--secondary);
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            opacity: 0;
+            z-index: 10;
+        }
+        
+        /* Success message */
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+            display: none;
+            animation: pulse 2s infinite;
+            border: 3px solid var(--success);
+        }
+        
+        .success-message h3 {
+            color: var(--secondary);
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+        
+        .success-message p {
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .code-input input {
+                width: 50px;
+                height: 60px;
+                font-size: 28px;
+            }
+            
+            .gifts {
+                grid-template-columns: 1fr;
+            }
+            
+            .music-player {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating elements background -->
+    <div class="floating-elements" id="floating-container"></div>
+    
+    <div class="container">
+        <h1>Kho Báu Tình Yêu</h1>
+        <p class="subtitle">Giải mã trái tim tôi để nhận được những điều đặc biệt...</p>
+        
+        <div class="lock-container">
+            <div class="code-input">
+                <input type="number" maxlength="1" id="digit1" data-next="digit2">
+                <input type="number" maxlength="1" id="digit2" data-next="digit3">
+                <input type="number" maxlength="1" id="digit3" data-next="digit4">
+                <input type="number" maxlength="1" id="digit4" data-next="digit5">
+                <input type="number" maxlength="1" id="digit5" data-next="digit6">
+                <input type="number" maxlength="1" id="digit6">
+            </div>
+            <button id="unlock-btn" class="btn">Mở Kho Báu</button>
+            <p id="error-message" style="color: var(--primary); text-align: center; margin-top: 20px; font-weight: 600;"></p>
+        </div>
+        
+        <div class="hint">
+            <h3>Hướng Dẫn Giải Mã</h3>
+            <p>Chơi xong hú em!</p>
+        </div>
+        
+        <div id="treasure" class="treasure">
+            <h2>Chúc Mừng chồng!</h2>
+            <p>Tuy quà như qq nhưng coi như ráng nhận nha anh hihi.</p>
+            
+            <div class="gifts">
+                <div class="gift">
+                    <h3>Tâm Thư</h3>
+                    <p>Những lời chưa từng nói từ sâu trong trái tim</p>
+                    <a href="treasure.html" class="gift-btn">Mở Ngay</a>
+                </div>
+                <div class="gift">
+                    <h3>Ký Ức</h3>
+                    <p>Những khoảnh khắc đẹp nhất của chúng ta</p>
+                    <a href="memories.html" class="gift-btn">Mở Ngay</a>
+                </div>
+            </div>
+            
+            <div class="back-btn">
+                <a href="index.html" class="btn">Về Trang Chủ</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Music player -->
+    <div class="music-player">
+        <button id="play-btn" class="music-btn">▶️</button>
+        <span id="song-title">Bình gold</span>
+    </div>
+    
+    <!-- Success message -->
+    <div class="success-message" id="success-message">
+        <h3>Thành Công!</h3>
+        <p>Bạn đã mở được kho báu trái tim tôi ❤️</p>
+    </div>
+    
+    <!-- Audio element -->
+    <audio id="bg-music" loop>
+        <source src="/FishBirthday/sounds/Donald Gold - Trăng Hoa Mây Mưa [SPTUEeGW50E].mp3" type="audio/mpeg">
+        <!-- Thay bằng link nhạc thực tế -->
+    </audio>
+    
+    <script>
+        // Tạo floating elements
+        function createFloatingElements() {
+            const container = document.getElementById('floating-container');
+            const elements = ['❤️', '✨', '🌸', '🎀', '🔑', '🎁'];
+            const count = 12;
+            
+            for (let i = 0; i < count; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.textContent = elements[Math.floor(Math.random() * elements.length)];
+                element.style.left = Math.random() * 100 + 'vw';
+                element.style.top = Math.random() * 100 + 'vh';
+                element.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                element.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                element.style.animationDelay = (Math.random() * 5) + 's';
+                element.style.opacity = Math.random() * 0.5 + 0.3;
+                container.appendChild(element);
+            }
+        }
+        
+        // Tự động chuyển focus giữa các ô input
+        document.querySelectorAll('.code-input input').forEach((input, index, inputs) => {
+            input.addEventListener('input', function() {
+                if (this.value.length === 1) {
+                    const nextId = this.getAttribute('data-next');
+                    if (nextId) {
+                        document.getElementById(nextId).focus();
+                    }
+                }
+            });
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+        
+        // Xử lý nút mở khóa
+        document.getElementById('unlock-btn').addEventListener('click', function() {
+            const digit1 = document.getElementById('digit1').value;
+            const digit2 = document.getElementById('digit2').value;
+            const digit3 = document.getElementById('digit3').value;
+            const digit4 = document.getElementById('digit4').value;
+            const digit5 = document.getElementById('digit5').value;
+            const digit6 = document.getElementById('digit6').value;
+            
+            const code = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
+            
+            if (code === '682734') {
+                document.getElementById('treasure').style.display = 'block';
+                document.getElementById('error-message').textContent = '';
+                
+                // Hiệu ứng thành công
+                showSuccessMessage();
+                createConfetti();
+                
+                // Cuộn đến kho báu
+                setTimeout(() => {
+                    document.getElementById('treasure').scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+                
+                // Phát nhạc khi mở thành công (nếu chưa phát)
+                const music = document.getElementById('bg-music');
+                if (music.paused) {
+                    music.play();
+                    document.getElementById('play-btn').textContent = '⏸️';
+                }
+            } else {
+                document.getElementById('error-message').textContent = 'Mật mã chưa chính xác. Hãy thử lại với trái tim!';
+                // Hiệu ứng lắc
+                document.querySelector('.code-input').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.querySelector('.code-input').style.animation = '';
+                }, 500);
+            }
+        });
+        
+        // Hiển thị thông báo thành công
+        function showSuccessMessage() {
+            const message = document.getElementById('success-message');
+            message.style.display = 'block';
+            
+            setTimeout(() => {
+                message.style.animation = 'fadeIn 0.5s reverse';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                    message.style.animation = 'pulse 2s infinite';
+                }, 500);
+            }, 2000);
+        }
+        
+        // Tạo hiệu ứng confetti
+        function createConfetti() {
+            const colors = ['#FF6B8B', '#6B5B95', '#FFB347', '#88D8B0', '#FFD166', '#06D6A0'];
+            const container = document.querySelector('.container');
+            
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = -10 + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.width = Math.random() * 15 + 5 + 'px';
+                confetti.style.height = Math.random() * 15 + 5 + 'px';
+                container.appendChild(confetti);
+                
+                // Animation
+                const animation = confetti.animate([
+                    { top: '-10px', opacity: 1, transform: 'rotate(0deg) scale(1)' },
+                    { 
+                        top: '100%', 
+                        opacity: 0, 
+                        transform: `rotate(${Math.random() * 360}deg) scale(0.5)`,
+                        left: Math.random() > 0.5 
+                            ? `calc(${Math.random() * 20 + 40}%)` 
+                            : `calc(${Math.random() * 20 + 40}%)`
+                    }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+        
+        // Xử lý nút nhạc
+        const music = document.getElementById('bg-music');
+        const playBtn = document.getElementById('play-btn');
+        
+        playBtn.addEventListener('click', function() {
+            if (music.paused) {
+                music.play();
+                playBtn.textContent = '⏸️';
+            } else {
+                music.pause();
+                playBtn.textContent = '▶️';
+            }
+        });
+        
+        // Tự động tạo floating elements khi trang load
+        window.addEventListener('load', function() {
+            createFloatingElements();
+            
+            // Thêm animation cho container
+            document.querySelector('.container').style.animation = 'fadeIn 1s';
+            
+            // Thêm hiệu ứng cho các ô input
+            setTimeout(() => {
+                document.querySelectorAll('.code-input input').forEach((input, index) => {
+                    setTimeout(() => {
+                        input.style.animation = 'fadeIn 0.5s';
+                        input.style.opacity = 1;
+                    }, index * 100);
+                });
+            }, 300);
+        });
+    </script>
+</body>
+</html>

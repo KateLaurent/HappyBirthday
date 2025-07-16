@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhật Ký Tình Yêu - 8 Trang Yêu Thương</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Playfair Display', serif;
+            background-color: #fff5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .love-diary {
+            width: 90%;
+            max-width: 800px;
+            margin: 30px auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #fff9f9;
+            border: 1px solid #f0d6d6;
+        }
+
+        .page {
+            padding: 40px;
+            display: none;
+            flex-direction: column;
+            min-height: 70vh;
+        }
+
+        .page.active {
+            display: flex;
+            animation: fadeIn 1.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-image {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .page-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1s ease;
+        }
+
+        .page-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .audio-container {
+            width: 100%;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        audio {
+            width: 80%;
+            outline: none;
+            border-radius: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        audio::-webkit-media-controls-panel {
+            background-color: #fff9f9;
+        }
+
+        .page-content {
+            line-height: 1.8;
+            font-size: 17px;
+            text-align: justify;
+            color: #5a3e36;
+            margin-bottom: 20px;
+        }
+
+        .page-header {
+            font-family: 'Dancing Script', cursive;
+            color: #d23669;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .page-header:after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #d23669, transparent);
+            margin: 10px auto;
+        }
+
+        .page-date {
+            text-align: right;
+            font-style: italic;
+            color: #a78a7f;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .heart {
+            text-align: center;
+            font-size: 2rem;
+            color: #d23669;
+            margin: 30px 0;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #f0d6d6;
+        }
+
+        .controls button {
+            background-color: #d23669;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(210, 54, 105, 0.3);
+        }
+
+        .controls button:hover {
+            background-color: #a51c4a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(210, 54, 105, 0.4);
+        }
+
+        .controls button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .controls button i {
+            margin: 0 5px;
+        }
+
+        .page-number {
+            text-align: center;
+            color: #a78a7f;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Hiệu ứng hoa rơi */
+        .petals {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .petal {
+            position: absolute;
+            background-image: url('https://i.pinimg.com/originals/8c/7c/86/8c7c862d1c8c4b5e5c7b9e9e9e9e9e9e.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.7;
+            animation: falling linear infinite;
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translate(0, -10%) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--end-x), 100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Nhạc nền */
+        .bg-music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .bg-music-control i {
+            color: #d23669;
+            font-size: 1.2rem;
+        }
+
+        .back-to-challenge {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #d23669;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-challenge:hover {
+            background-color: #d23669;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(210, 54, 105, 0.3);
+        }
+
+        .back-to-challenge i {
+            margin-right: 8px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <a href="challenges.html" class="back-to-challenge">
+        <i class="fas fa-arrow-left"></i> Về thử thách
+    </a>
+    <div class="love-diary" id="diary">
+        <!-- Trang 1 -->
+        <div class="page active" data-page="1">
+            <h2 class="page-header">Ngày Đầu Tiên</h2>
+            <div class="page-date">27.04.2025</div>
+            
+            <div class="page-image">
+                <img src="/FishBirthday/images/a16f1175-11a6-4806-80b4-68132fa6826e.jpg" alt="Khoảnh khắc đầu tiên">
+            </div>
+            
+            <div class="audio-container">
+                <audio controls>
+                    <source src="/FishBirthday/sounds/HIEUTHUHAI - TRÌNH (prod. by Kewtiie) [7kO_ALcwNAw].mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            
+            <div class="page-content">
+                <p>Ngày đầu em nhắn với anh, ấn tượng có thể là anh khá chăm học chăng? Lâu lắm rồi em mới thấy ai sôi nổi trong việc học hành như thế, tuy có hơi ngáo nhưng cũng nhìn cũng hay hay.</p>
+<p>Lúc đó em nhắn với anh như những người khác thôi à, được cái anh nhắn dài mà không emo nên cũng ổn, thường thì mọi người nhắn với em hay theo phương diện thảo luận đào sâu hoặc an ủi, riêng anh thì brainrot cute phết.</p>
+<p>Mà lúc trước anh để ảnh mèo thân thiện thiệt, nhìn vào đâu ai nghĩ sau này mỏ hỗn :33, chiếm lĩnh thị trường giới truyền thông.</p>
+<p>Idk hồi đó không nhớ nhiều lắm, em chỉ biết anh chia sẻ khá thật và cũng không có vấn đề gì khi em hỏi những câu hỏi có phần riêng tư chút, em tò mò và anh đáp lại nó với thái độ bình thường nên em cũng đỡ nghĩ hơn. :v</p>
+<p>Mà đó cũng là thứ khó ngờ nhất sau này, em không nghĩ một người từng bảo thiếu an toàn với mọi người lại yêu em vì em thấy em thiếu an toàn nhất nhóm đó rồi, tuy vậy nhưng cũng biết hơn vì anh đã cạnh em hihi.</p>
+<p>Tuy rằng hồi trước hơi bé nhỏ nhưng giờ bảo vệ em đỉnh đó chứ, rất yêu bạn nhé.</p>
+            </div>
+            
+            <div class="controls">
+                <button class="prev-btn" disabled><i class="fas fa-arrow-left"></i> Trang trước</button>
+                <button class="next-btn">Trang sau <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+            <div class="page-number">Trang 1/6</div>
+        </div>
+
+        <!-- Trang 2 -->
+        <div class="page" data-page="2">
+            <h2 class="page-header">Ấn tượng sương sương</h2>
+            <div class="page-date">Đã quá xa để tìm kiếm</div>
+            
+            <div class="page-image">
+                <img src="/FishBirthday/images/11ee285c-36bc-4411-b50b-3b5e3984cf22.jpg" alt="Ấn tượng sương sương">
+            </div>
+            
+            <div class="audio-container">
+                <audio controls>
+                    <source src="/FishBirthday/sounds/An Thần (ft. Thắng) _ Low G _ Rap Nhà Làm [J7eYhM6wXPo].mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            
+            <div class="page-content">
+                <p>Tính ra em trách lầm chồng, anh từng flirt em rồi mà tại nó hiếm hoi quá nên em quên, lần đầu anh chọc em cũng là lần anh chia sẻ về quan điểm tình trường của anh, đợt đó em không quan tâm lắm nên cũng không đọc (méo ngờ sau này là mình).</p>
+<p>Nhưng mà được cái em thấy anh dễ thương thiệt, kiểu hài hài thẳng thắn phết, lúc ấy mới thấy trưởng thành hơn chút.</p>
+<p>Xui rủi sao mà lúc đó em nghĩ anh với Hasey giống bộ đôi cá dãy trong nhóm, em thấy hợp thiệt, cũng hay tự tưởng tượng ra kịch bản xong gán vào rồi ngồi cười cho đỡ chán.</p>
+<p>Tuy rằng ngày trước trong mắt em anh vẫn matday nhưng ở thời điểm đó đã cải thiện hơn rồi. Trừ cái đoạn 1m crush chục đứa ra thì thấy ổn áp, hiểu sao ngày đó em thấy anh cũng oke nhưng mà đụng tới khoản đa thê như em Hà thì em tắt suy nghĩ, giờ thì ổn rồi hehe, chồng ngoan chồng giỏi, biết quan tâm cực kì.</p>
+            </div>
+            
+            <div class="controls">
+                <button class="prev-btn"><i class="fas fa-arrow-left"></i> Trang trước</button>
+                <button class="next-btn">Trang sau <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+            <div class="page-number">Trang 2/6</div>
+        </div>
+
+        <!-- Trang 3 -->
+        <div class="page" data-page="3">
+            <h2 class="page-header">Chuyển giao</h2>
+            <div class="page-date">15.6.2025 - 16.6.2025</div>
+            
+            <div class="page-image">
+                <img src="/FishBirthday/images/6299ad8b-0443-46e9-8db8-80da95720c1c.jpg" alt="Chuyển giao">
+            </div>
+            
+            <div class="audio-container">
+                <audio controls>
+                    <source src="/FishBirthday/sounds/TÁI SINH - Tùng Dương (ST_ Tăng Duy Tân) _ Liveshow Người Đàn Ông Hát _ Chìm vào trong ánh mắt... [EqKUpelTb6A].mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            
+            <div class="page-content">
+                <p>Chính ngày này, tuy đây là ngày anh nói thích em nhưng em ấn tượng đoạn anh hỏi em tìm ai để phân tích hơn, :33 nhìn ngáo ngáo hay thế không biết, mà nếu trước em để ý thì có thể em hiểu rồi mà không rõ tại sao em không để ý nữa, có thể do em thấy xác suất anh thích em thấp kinh khủng nên em cũng chill.</p>
+<p>Nhắn với anh cũng vui, có vài hôm nhắn tới gần sáng, dù em biết em nhạt và anh cũng chán nhưng cứ nhắn vậy cho có cái duy trì buổi đêm muộn, ngày đó anh thức trâu thiệt, em còn không nghĩ sau này em phải canh lúc anh buồn ngủ để chụp anh ném ra chuồng gà, thời thế thay đổi thiệt.</p>
+<p>Idk em thấy cảm xúc lúc đó hơi đơ một chút, cũng không phải cảnh giác gì, chỉ là ngạc nhiên ngỡ ngàng bật ngửa, em cũng hay tự ghép đôi mấy đứa trong não và anh đã được em ghép trước với người khác nên em cũng gọi là hơi khựng lại, tuy vậy thì em vẫn phải hỏi những ý khác vì em cũng tò mò, tuy lúc ấy không rõ sau này có thích anh không nhưng anh cute thật, nhắn với anh tuy hạt nhài nhưng brainrot, cũng đáng để hy vọng mà.</p>
+            </div>
+            
+            <div class="controls">
+                <button class="prev-btn"><i class="fas fa-arrow-left"></i> Trang trước</button>
+                <button class="next-btn">Trang sau <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+            <div class="page-number">Trang 3/6</div>
+        </div>
+
+        <!-- Trang 4 -->
+        <div class="page" data-page="4">
+            <h2 class="page-header">Sóng gió Rose97</h2>
+            <div class="page-date">Cỡ 1 tuần sau đó</div>
+            
+            <div class="page-image">
+                <img src="/FishBirthday/images/9af7b698-0622-46de-b426-57f88ffce802.jpg" alt="Giận nhau">
+            </div>
+            
+            <div class="audio-container">
+                <audio controls>
+                    <source src="/FishBirthday/sounds/BẠC PHẬN ｜ ICM x JACK ｜ OFFICIAL MV.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            
+            <div class="page-content">
+                <p>Dành hẳn 1 trang để viết điều này, sau những ngày soi lại khoảng thời gian em đày anh thì thiệt sự anh chồng của em đã trải qua kiếp nạn khó sống thật sự, dù chưa yêu nhau khúc đó nhưng cái gì người yêu nhau thắc mắc hoặc không em đều đè anh ra khỏi cho bằng được, đủ thứ ngôn ngữ lẫn suy nghĩ rối tung rối mù.</p>
+<p>Và thật xuất sắc khi chồng em đã dành vé đi tiếp vào vòng chung kết và đứng top 1 lòng em sau đó. Cảm ơn daika vì không quản ngại đường xá bao bùng để đến bên em dù sau đó bão cũng không dừng, chưa thấy trời quang được tuần nào cả nhưng vẫn thương em cực kì.</p>
+<p>Anh rõ em có nhiều vấn đề mà vẫn luôn kiên nhẫn với em, em thời điểm ấy chỉ muốn anh hiểu em có nhiều thứ khó chấp nhận thế nào để anh có thể nghĩ cho mình thôi à, ai dè anh vẫn chọn ở cạnh em, thiệt đỉnh.</p>
+<p>Tuy rằng em hay mắng anh và vô lý với anh nhưng em thương anh cực kì, dù có cho anh vào vòng loại của Rô 97 nhưng em chỉ muốn anh tốt thôi à (dù không hỏi ý anh hihi).</p>
+<p>Idk baby của em tuyệt mà, giỏi nữa, :33 chưa bao giờ hối hận vì quyết định này của bản thân.</p>
+            </div>
+            
+            <div class="controls">
+                <button class="prev-btn"><i class="fas fa-arrow-left"></i> Trang trước</button>
+                <button class="next-btn">Trang sau <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+            <div class="page-number">Trang 4/6</div>
+        </div>
+
+        <!-- Trang 5 -->
+        <div class="page" data-page="5">
+            <h2 class="page-header">Định mệnh</h2>
+            <div class="page-date">29.6.2025</div>
+            
+            <div class="page-image">
+                <img src="/FishBirthday/images/carp.png" alt="Định mệnh">
+            </div>
+            
+            <div class="audio-container">
+                <audio controls>
+                    <source src="/FishBirthday/sounds/BLACKLIONS- _LAST NIGHT_ M_V OFFICAL [K9RFqA4bNfg].mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            
+            <div class="page-content">
+                <p>Idk theo kế hoạch thì em định 13/07 mới nói em thích anh cơ, nhưng mà tối đó đang tiện nói chuyện với lại emo đang lên nên thôi mở mỏ ra nói đại.</p>
+                <p>Cảm xúc lúc đó không biết diễn tả như thế nào, nhưng mà hạnh phúc thiệt, kiểu lần đầu tiên em được tự confirm về thứ mình đang nghĩ và anh cũng tôn trọng điều đó, cảm giác tự chủ hẳn :33.</p>
+                <p>Hôm đó nói nhiều quá hay gì mà giờ não không nhớ quá rõ đã nói gì thật, em bấn loạn quá nên chắc quên hầu hết rồi, chỉ nhớ anh mệt mà em vẫn ráng chèo kéo anh hơn 4 giờ sáng mới cho ngủ, thương bạn nhiều. &lt;33</p>
+            </div>
+            
+            <div class="controls">
+                <button class="prev-btn"><i class="fas fa-arrow-left"></i> Trang trước</button>
+                <button class="next-btn">Trang sau <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+            <div class="page-number">Trang 5/6</div>
+        </div>
+
+        <!-- Trang 6 -->
+        <div class="page" data-page="6">
+            <h2 class="page-header">Happy Birthday</h2>
+            <div class="page-date">17.07.2025</div>
+            
+            <div class="page-image">
+                <img src="/FishBirthday/images/0e222ee7e785d8dd31ac64a25a9525cb.jpg" alt="Bất ngờ">
+            </div>
+            
+            <div class="audio-container">
+                <audio controls>
+                    <source src="/FishBirthday/sounds/Happy Birthday (Korean Version) [ZY4P729oEvI].mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            
+            <div class="page-content">
+                <p>Happy birthday chồng yêu! Chúc baby có thể đạt được điều mình mong muốn và ở cạnh em thật lâu nha &lt;333</p>
+<p>Tuy cái này chưa đẹp lắm và có phần hơi phèn nhưng đảm bảo tình cảm chân thành từ tận đáy lòng em, trần trụi và thật nhất rồi.</p>
+<p>Cảm ơn chồng vì đã cố gắng trong quãng thời gian qua, tuy rằng vẫn chưa tròn 1 tháng nhưng em cảm tưởng mình cạnh nhau như 1 đời vậy, có quá nhiều điều đã trải qua và cảm xúc trong em cũng lên xuống dã man.</p>
+<p>Ngày anh sinh ra đời em cũng nên đổi mới bản thân một chút maybe, đón chờ em trong bộ áo mới đi nhé (chắc thế).</p>
+<p>Yêu chồng nhiều, thương anh lắm!</p>
+            </div>
+            
+            <div class="controls">
+                <button class="prev-btn"><i class="fas fa-arrow-left"></i> Trang trước</button>
+                <button class="next-btn">Trang sau <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+            <div class="page-number">Trang 6/6</div>
+        </div>
+
+        
+    <!-- Nhạc nền -->
+    <div class="bg-music-control" id="musicControl">
+        <i class="fas fa-music"></i>
+    </div>
+    <audio id="bgMusic" loop>
+        <source src="sounds/Taylor Swift - Love Story (Lyrics).mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Hiệu ứng hoa rơi -->
+    <div class="petals" id="petals"></div>
+
+    <script>
+        // Quản lý trang
+        const pages = document.querySelectorAll('.page');
+        const prevBtns = document.querySelectorAll('.prev-btn');
+        const nextBtns = document.querySelectorAll('.next-btn');
+        let currentPage = 0;
+
+        // Hiển thị trang hiện tại
+        function showPage(index) {
+            pages.forEach((page, i) => {
+                if (i === index) {
+                    page.classList.add('active');
+                } else {
+                    page.classList.remove('active');
+                }
+            });
+
+            // Cuộn lên đầu trang
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Cập nhật trạng thái nút
+            updateButtonStates();
+        }
+
+        // Cập nhật trạng thái nút
+        function updateButtonStates() {
+            prevBtns.forEach(btn => {
+                btn.disabled = currentPage <= 0;
+            });
+            
+            nextBtns.forEach(btn => {
+                btn.disabled = currentPage >= pages.length - 1;
+            });
+        }
+
+        // Chuyển trang
+        function goToPage(index) {
+            if (index >= 0 && index < pages.length) {
+                currentPage = index;
+                showPage(currentPage);
+            }
+        }
+
+        // Thêm sự kiện cho các nút
+        prevBtns.forEach(btn => {
+            btn.addEventListener('click', () => goToPage(currentPage - 1));
+        });
+        
+        nextBtns.forEach(btn => {
+            btn.addEventListener('click', () => goToPage(currentPage + 1));
+        });
+
+        // Nhạc nền
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('musicControl');
+        let isMusicPlaying = false;
+
+        musicControl.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicControl.innerHTML = '<i class="fas fa-music"></i>';
+            } else {
+                bgMusic.play();
+                musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+
+        // Hiệu ứng hoa rơi
+        function createPetals() {
+            const petalsContainer = document.getElementById('petals');
+            const petalCount = 15;
+
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                
+                const size = Math.random() * 20 + 10;
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${Math.random() * 100}vw`;
+                
+                const duration = Math.random() * 10 + 10;
+                petal.style.animationDuration = `${duration}s`;
+                petal.style.animationDelay = `${Math.random() * 10}s`;
+                petal.style.setProperty('--end-x', `${Math.random() * 100 - 50}px`);
+                
+                petalsContainer.appendChild(petal);
+            }
+        }
+
+        // Khởi tạo
+        showPage(0);
+        createPetals();
+    </script>
+</body>
+</html>

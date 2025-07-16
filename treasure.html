@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Anh Yêu ❤️</title>
+    <style>
+        /* Font chữ dễ thương */
+        @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Quicksand:wght@400;600&display=swap');
+
+        
+        :root {
+            --pink: #ff9bb3;
+            --pink-light: #ffd6de;
+            --pink-dark: #ff6b8b;
+            --purple: #d8b4fe;
+            --yellow: #fef08a;
+            --blue: #bae6fd;
+            --text: #5a3d5a;
+        }
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #fff9fb;
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        /* Header dễ thương */
+        .blog-header {
+            background: linear-gradient(135deg, var(--pink) 0%, var(--purple) 100%);
+            padding: 50px 0 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            border-bottom: 3px dotted white;
+        }
+        
+        .blog-header::before {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V7.23C0,65.52,268.63,112.77,600,112.77S1200,65.52,1200,7.23V0Z' fill='%23fff9fb'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+        }
+        
+        .blog-title {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 3rem;
+            color: white;
+            margin: 0;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        
+        .blog-subtitle {
+            font-size: 1.3rem;
+            color: white;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+        
+        /* Nút quay lại */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            color: var(--pink-dark);
+            text-decoration: none;
+            font-size: 1rem;
+            z-index: 100;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            background-color: var(--yellow);
+        }
+        
+        /* Container chính */
+        .blog-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px 50px;
+        }
+        
+        /* Bài viết dạng thẻ cute */
+        .post-card {
+            background: white;
+            border-radius: 15px;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(255,155,179,0.2);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid white;
+            position: relative;
+        }
+        
+        .post-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, var(--pink) 0%, var(--purple) 50%, var(--blue) 100%);
+        }
+        
+        .post-card:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 10px 25px rgba(255,155,179,0.3);
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 2px dotted var(--pink-light);
+        }
+        
+        .post-content {
+            padding: 20px;
+            background: linear-gradient(to bottom, white, #fff9fc);
+        }
+        
+        .post-title {
+            font-family: 'Patrick Hand', cursive;
+            color: var(--pink-dark);
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .post-excerpt {
+            color: var(--text);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .read-more {
+            display: inline-block;
+            background: var(--pink);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 3px 5px rgba(255,107,139,0.3);
+        }
+        
+        .read-more:hover {
+            background: var(--pink-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(255,107,139,0.4);
+        }
+        
+        /* Trang bài viết chi tiết */
+        .post-detail {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,214,222,0.9);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+        }
+        
+        .detail-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(255,155,179,0.3);
+            position: relative;
+            border: 2px solid var(--pink-light);
+            animation: bounceIn 0.5s;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .close-detail {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background-color: var(--pink-light);
+            border-radius: 50%;
+            border: none;
+            color: var(--pink-dark);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-detail:hover {
+            background-color: var(--pink);
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .detail-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .detail-title {
+            font-family: 'Patrick Hand', cursive;
+            color: var(--pink-dark);
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .detail-audio {
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .detail-text {
+            font-size: 1.1rem;
+            color: var(--text);
+            line-height: 1.8;
+            white-space: pre-line;
+            background: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30,50 Q50,30 70,50 Q90,70 70,90 Q50,110 30,90 Q10,70 30,50" fill="none" stroke="%23ffd6de" stroke-width="2"/></svg>');
+            background-size: 50px;
+            background-repeat: no-repeat;
+            background-position: left top;
+            padding-left: 40px;
+        }
+        
+        /* Trái tim nhấp nháy */
+        .heart {
+            position: fixed;
+            font-size: 20px;
+            color: var(--pink);
+            animation: float 4s ease-in-out infinite;
+            opacity: 0.7;
+            z-index: -1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blog-title {
+                font-size: 2.2rem;
+            }
+            
+            .blog-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .post-image {
+                height: 200px;
+            }
+            
+            .post-title {
+                font-size: 1.8rem;
+            }
+            
+            .detail-container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            
+            .detail-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Trái tim bay xung quanh -->
+    <div class="heart" style="top:20%; left:10%;">❤️</div>
+    <div class="heart" style="top:70%; left:85%; animation-delay:1s;">❤️</div>
+    <div class="heart" style="top:40%; left:75%; animation-delay:0.5s;">❤️</div>
+    <div class="heart" style="top:85%; left:15%; animation-delay:1.5s;">❤️</div>
+    
+    <!-- Nút quay lại -->
+    <a href="challenges.html" class="back-button">
+        <span>←</span> Thử thách
+    </a>
+    
+    <!-- Header blog -->
+    <header class="blog-header">
+        <div class="blog-container">
+            <h1 class="blog-title">Gửi Anh Yêu ❤️</h1>
+            <p class="blog-subtitle">Món quà nhỏ cho những ngày xa cách</p>
+        </div>
+    </header>
+    
+    <!-- Danh sách bài viết -->
+    <main class="blog-container">
+        <!-- Bài 1: Khi anh buồn -->
+        <article class="post-card" onclick="showDetail(1)">
+            <img src="/FishBirthday/images/fe0d2952889b2df771709aaa283290fd.jpg" alt="Khi anh buồn" class="post-image">
+            <div class="post-content">
+                <h2 class="post-title">Khi anh buồn ☁️</h2>
+                <p class="post-excerpt">Những lúc mây đen kéo đến, em mong anh hãy mở món quà nhỏ này...</p>
+                <a href="#" class="read-more" onclick="event.preventDefault(); showDetail(1)">
+                    Mở quà ngay 💝
+                </a>
+            </div>
+        </article>
+        
+        <!-- Bài 2: Khi anh khó chịu -->
+        <article class="post-card" onclick="showDetail(2)">
+            <img src="/FishBirthday/images/tải xuống (4).jpg" alt="Khi anh khó chịu" class="post-image">
+            <div class="post-content">
+                <h2 class="post-title">Khi anh khó chịu 🌋</h2>
+                <p class="post-excerpt">Bực bội khó chịu ư? Em có liều thuốc đặc biệt này...</p>
+                <a href="#" class="read-more" onclick="event.preventDefault(); showDetail(2)">
+                    Mở quà ngay 💝
+                </a>
+            </div>
+        </article>
+        
+        <!-- Bài 3: Khi anh cô đơn -->
+        <article class="post-card" onclick="showDetail(3)">
+            <img src="/FishBirthday/images/630d6ad73a8b465a717863df09795648.jpg" alt="Khi anh cô đơn" class="post-image">
+            <div class="post-content">
+                <h2 class="post-title">Khi anh cô đơn 🌙</h2>
+                <p class="post-excerpt">Em biết anh đang cảm thấy lạc lõng, hãy mở quà này nhé...</p>
+                <a href="#" class="read-more" onclick="event.preventDefault(); showDetail(3)">
+                    Mở quà ngay 💝
+                </a>
+            </div>
+        </article>
+        
+        <!-- Bài 4: Khi anh tủi thân -->
+        <article class="post-card" onclick="showDetail(4)">
+            <img src="/FishBirthday/images/7cd067f486977c1bbe6fca6883ec2863.jpg" alt="Khi anh tủi thân" class="post-image">
+            <div class="post-content">
+                <h2 class="post-title">Khi anh tủi thân 💔</h2>
+                <p class="post-excerpt">Anh đừng tủi thân nữa nhé, em có điều muốn nói...</p>
+                <a href="#" class="read-more" onclick="event.preventDefault(); showDetail(4)">
+                    Mở quà ngay 💝
+                </a>
+            </div>
+        </article>
+    </main>
+    
+    <!-- Bài viết chi tiết 1 -->
+    <div id="detail-1" class="post-detail">
+        <div class="detail-container">
+            <button class="close-detail" onclick="hideDetail(1)">✕</button>
+            <img src="/FishBirthday/images/fe0d2952889b2df771709aaa283290fd.jpg" alt="Khi anh buồn" class="detail-image">
+            <h2 class="detail-title">Khi anh buồn ☁️</h2>
+            <audio controls class="detail-audio">
+                <source src="/FishBirthday/sounds/Buồn.mp3" type="audio/mpeg">
+            </audio>
+            <div class="detail-text">
+                Anh yêu à,
+                
+                Những ngày buồn giống như cơn mưa bất chợt
+                Nhưng em muốn anh nhớ rằng:
+                
+                💖 Sau mưa trời lại sáng
+                💖 Nỗi buồn nào rồi cũng qua
+                💖 Và em luôn ở đây vì anh
+                
+                Hãy thử:
+                🌸 Nghe bài hát em gửi
+                🌸 Xem lại ảnh kỷ niệm
+                🌸 Nhắn cho em nếu cần
+                
+                Anh không bao giờ cô đơn đâu, vì có em luôn yêu thương anh!
+                
+                Yêu anh nhiều ❤️❤️❤️
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bài viết chi tiết 2 -->
+    <div id="detail-2" class="post-detail">
+        <div class="detail-container">
+            <button class="close-detail" onclick="hideDetail(2)">✕</button>
+            <img src="/FishBirthday/images/tải xuống (4).jpg" alt="Khi anh khó chịu" class="detail-image">
+            <h2 class="detail-title">Khi anh khó chịu 🌋</h2>
+            <audio controls class="detail-audio">
+                <source src="/FishBirthday/sounds/Khó-chịu.mp3" type="audio/mpeg">
+            </audio>
+            <div class="detail-text">
+                Anh của em ơi,
+                
+                Em biết hôm nay là ngày không vui
+                Nhưng hãy thử những cách này nhé:
+                
+                🌈 Hít thở sâu 3 lần:
+                1. Hít vào... thở ra...
+                2. Hít vào... thở ra...
+                3. Hít vào... thở ra...
+                
+                🌈 Uống một ly nước mát
+                🌈 Nghe bài hát yêu thích
+                🌈 Nhắn cho em nếu cần
+                
+                Anh là người mạnh mẽ lắm!
+                Đừng để những điều nhỏ làm phiền mình nhé ❤️
+                
+                Em yêu anh! 💋
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bài viết chi tiết 3 -->
+    <div id="detail-3" class="post-detail">
+        <div class="detail-container">
+            <button class="close-detail" onclick="hideDetail(3)">✕</button>
+            <img src="/FishBirthday/images/630d6ad73a8b465a717863df09795648.jpg" alt="Khi anh cô đơn" class="detail-image">
+            <h2 class="detail-title">Khi anh cô đơn 🌙</h2>
+            <audio controls class="detail-audio">
+                <source src="/FishBirthday/sounds/Cô-đơn.mp3" type="audio/mpeg">
+            </audio>
+            <div class="detail-text">
+                Gửi anh yêu dấu,
+                
+                Em biết khoảng cách khiến anh cô đơn
+                Nhưng hãy nhớ rằng:
+                
+                ✨ Em luôn nghĩ về anh mỗi ngày
+                ✨ Trái tim em luôn hướng về anh
+                ✨ Chúng ta sẽ sớm được gặp lại
+                
+                Khi nhớ em, hãy:
+                💌 Xem ảnh của chúng mình
+                💌 Nghe giọng nói của em
+                💌 Gọi video cho em
+                
+                Anh không bao giờ cô đơn đâu!
+                Vì có em luôn yêu anh từ xa ❤️
+                
+                Nhớ anh nhiều! 😘
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bài viết chi tiết 4 -->
+    <div id="detail-4" class="post-detail">
+        <div class="detail-container">
+            <button class="close-detail" onclick="hideDetail(4)">✕</button>
+            <img src="/FishBirthday/images/7cd067f486977c1bbe6fca6883ec2863.jpg" alt="Khi anh tủi thân" class="detail-image">
+            <h2 class="detail-title">Khi anh tủi thân 💔</h2>
+            <audio controls class="detail-audio">
+                <source src="/FishBirthday/sounds/Tủi-thân.mp3" type="audio/mpeg">
+            </audio>
+            <div class="detail-text">
+                Anh yêu à,
+                
+                Đừng bao giờ tủi thân nữa nhé
+                Vì với em:
+                
+                💝 Anh là người tuyệt vời nhất
+                💝 Anh xứng đáng được yêu thương
+                💝 Em luôn tự hào về anh
+                
+                Hãy nhớ:
+                🧸 Em sẽ luôn bên cạnh anh
+                🧸 Mọi khó khăn rồi sẽ qua
+                🧸 Tương lai còn nhiều điều đẹp đẽ
+                
+                Nếu cần một cái ôm ấm áp
+                Hãy nhắn cho em ngay nhé!
+                
+                Yêu anh nhất trên đời! ❤️💕
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Hiển thị bài viết chi tiết
+        function showDetail(number) {
+            document.getElementById(`detail-${number}`).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Ẩn bài viết chi tiết
+        function hideDetail(number) {
+            document.getElementById(`detail-${number}`).style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            const audio = document.querySelector(`#detail-${number} audio`);
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }
+        
+        // Đóng khi click ra ngoài
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('post-detail')) {
+                const openDetail = document.querySelector('.post-detail[style="display: block;"]');
+                if (openDetail) {
+                    const detailNumber = openDetail.id.split('-')[1];
+                    hideDetail(detailNumber);
+                }
+            }
+        });
+        
+        // Tạo trái tim bay
+        function createHearts() {
+            const colors = ['#ff9bb3', '#ffb3c6', '#ffccd5', '#ff758f'];
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = Math.random() * 100 + 'vh';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.animationDelay = (Math.random() * 2) + 's';
+            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+        
+        // Tạo trái tim mỗi 300ms
+        setInterval(createHearts, 300);
+    </script>
+</body>
+</html>

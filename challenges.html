@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LỰA CHỌN ĐỊNH MỆNH</title>
+    <style>
+        :root {
+            --blood-red: #5e0000;
+            --dark-red: #3a0000;
+            --flicker-red: #c70000;
+            --glow-red: rgba(199, 0, 0, 0.3);
+        }
+        
+        body {
+            background-color: #000;
+            color: #e0e0e0;
+            font-family: 'IM Fell English SC', serif;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(94, 0, 0, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(94, 0, 0, 0.1) 0%, transparent 20%),
+                url('https://example.com/cobweb-texture.png');
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Hiệu ứng giọt máu */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            right: -50%;
+            bottom: -50%;
+            background-image: url('https://example.com/blood-drops.png');
+            background-size: 30%;
+            opacity: 0.05;
+            pointer-events: none;
+            animation: bloodFlow 60s linear infinite;
+            z-index: -1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            position: relative;
+            border-bottom: 1px solid var(--blood-red);
+            box-shadow: 0 0 20px var(--glow-red);
+        }
+        
+        h1 {
+            color: transparent;
+            text-shadow: 0 0 8px var(--flicker-red);
+            font-size: 3em;
+            letter-spacing: 5px;
+            background-image: url('https://example.com/blood-texture.jpg');
+            background-clip: text;
+            -webkit-background-clip: text;
+            position: relative;
+            animation: flicker 3s infinite alternate;
+        }
+        
+        .subtitle {
+            font-style: italic;
+            margin-top: -15px;
+            opacity: 0.7;
+            text-shadow: 0 0 5px #000;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(30, 0, 0, 0.7);
+            color: #aaa;
+            border: 1px solid var(--blood-red);
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            z-index: 100;
+        }
+        
+        .back-button:hover {
+            color: #fff;
+            background-color: rgba(94, 0, 0, 0.7);
+            box-shadow: 0 0 10px var(--flicker-red);
+        }
+        
+        .back-button::before {
+            content: '←';
+            margin-right: 5px;
+        }
+        
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .challenge-card {
+            background: 
+                linear-gradient(135deg, rgba(20, 0, 0, 0.8) 0%, rgba(40, 0, 0, 0.6) 100%),
+                url('https://example.com/old-paper-texture.jpg');
+            border: 1px solid var(--blood-red);
+            border-radius: 3px;
+            padding: 0;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            height: 350px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .challenge-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px var(--glow-red);
+            border-color: #ff0000;
+        }
+        
+        .challenge-image {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .challenge-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(94, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .challenge-card:hover .challenge-image::after {
+            background: rgba(94, 0, 0, 0.1);
+        }
+        
+        .challenge-content {
+            padding: 20px;
+            position: relative;
+        }
+        
+        .challenge-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--blood-red);
+            color: white;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 0 10px rgba(199, 0, 0, 0.5);
+        }
+        
+        h2 {
+            color: #c0c0c0;
+            border-bottom: 1px dashed var(--blood-red);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.5em;
+            text-shadow: 1px 1px 2px #000;
+        }
+        
+        .description {
+            font-size: 0.95em;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .consequences {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            right: 20px;
+            font-size: 0.8em;
+            color: #777;
+            border-top: 1px dotted #5a0000;
+            padding-top: 10px;
+            font-style: italic;
+        }
+        
+        .challenge-card:hover .consequences {
+            color: #a00;
+        }
+        
+        /* Hiệu ứng động cho ảnh */
+        @keyframes subtleMove {
+            0%, 100% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.02) translateY(-3px); }
+        }
+        
+        .challenge-image {
+            animation: subtleMove 8s infinite ease-in-out;
+        }
+        
+        /* Hiệu ứng nhấp nháy */
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow: 0 0 8px var(--flicker-red);
+            }
+            20%, 22%, 24%, 55% {
+                text-shadow: 0 0 2px #ff0000, 0 0 5px #ff0000;
+            }
+        }
+        
+        @keyframes bloodFlow {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-5%, -5%); }
+            50% { transform: translate(5%, 5%); }
+            75% { transform: translate(5%, -5%); }
+            100% { transform: translate(0, 0); }
+        }
+        
+        /* Hiệu ứng chữ viết tay */
+        .handwriting {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 0.7em;
+            color: #5a0000;
+            transform: rotate(-5deg);
+        }
+        
+        /* Hiệu ứng rùng rợn khi hover */
+        .challenge-card:hover .challenge-image {
+            animation: subtleMove 3s infinite ease-in-out;
+        }
+        
+        /* Hiệu ứng chữ máu chảy */
+        .blood-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .blood-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--blood-red);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+        
+        .challenge-card:hover h2 .blood-text::after {
+            transform: scaleX(1);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button class="back-button" onclick="returnToIndex()">TRỞ VỀ NƠI AN TOÀN</button>
+    
+    <div class="header">
+        <h1><span class="blood-text">LỰA CHỌN ĐỊNH MỆNH</span></h1>
+        <p class="subtitle">"Mỗi lựa chọn đều khắc một vết thương không bao giờ lành..."</p>
+    </div>
+    
+    <div class="challenge-grid">
+        <!-- Thử thách 1 -->
+        <div class="challenge-card" onclick="selectChallenge(1, 'SẢNH CHỜ FIFAI')">
+            <div class="challenge-number">Ⅰ</div>
+            <div class="challenge-image" style="background-image: url('./images/d21d582363222aa828d3b46c2544ae77.jpg');"></div>
+            <div class="challenge-content">
+                <h2><span class="blood-text">SẢNH CHỜ FIFAI</span></h2>
+                <p class="description">Nơi thời gian ngừng trôi và những linh hồn mắc kẹt trong vòng lặp vĩnh cửu. Mỗi bước chân bạn đi sẽ in hằn lên tấm thảm đã thấm đẫm máu từ những người đi trước. Liệu bạn có thể tìm ra quy luật của sảnh chờ này trước khi trở thành một phần của nó?</p>
+                <p class="consequences">Hệ quả: Mỗi lần thất bại, đồng hồ của bạn sẽ chậm thêm 1 phút so với thế giới thực.</p>
+            </div>
+            <div class="handwriting">"Họ vẫn đang chờ ở phòng 237..."</div>
+        </div>
+        
+        <!-- Thử thách 2 -->
+        <div class="challenge-card" onclick="selectChallenge(2, 'MỐI QUAN HỆ HÌNH TAM GIÁC')">
+            <div class="challenge-number">Ⅱ</div>
+            <div class="challenge-image" style="background-image: url('./images/cb4dd4436a5d656506d791df1b392b3e.jpg');"></div>
+            <div class="challenge-content">
+                <h2><span class="blood-text">MỐI QUAN HỆ HÌNH TAM GIÁC</span></h2>
+                <p class="description">Ba cạnh, ba số phận, một bí mật chết người. Mỗi góc tam giác ẩn giấu một mảnh ghép của sự thật đẫm máu. Nhưng hãy cẩn thận, khi bạn giải mã được mối quan hệ này, bạn sẽ trở thành đỉnh thứ tư - điểm kết thúc của mọi chuyện.</p>
+                <p class="consequences">Hệ quả: Mỗi manh mối bạn khám phá sẽ xóa đi một ký ức quan trọng của bạn.</p>
+            </div>
+            <div class="handwriting">"Đừng tin vào người thứ ba..."</div>
+        </div>
+        
+        <!-- Thử thách 3 -->
+        <div class="challenge-card" onclick="selectChallenge(3, 'THỰC HÀNH PHÁP Y')">
+            <div class="challenge-number">Ⅲ</div>
+            <div class="challenge-image" style="background-image: url('./images/5b0f4f054a95a645a8e08013e5b1000f.jpg');"></div>
+            <div class="challenge-content">
+                <h2><span class="blood-text">THỰC HÀNH PHÁP Y</span></h2>
+                <p class="description">Bàn tay bạn sẽ phải chạm vào những điều không nên chạm. Mỗi vết mổ là một câu chuyện, mỗi cơ quan nội tạng là một bí mật. Nhưng khi bạn mở ra tử thi thứ 7, bạn sẽ nhận ra một điều kinh hoàng - người nằm trên bàn mổ có cùng vết sẹo với bạn.</p>
+                <p class="consequences">Hệ quả: Mỗi xác chết bạn khám nghiệm sẽ để lại một vết sẹo giống hệt trên cơ thể bạn.</p>
+            </div>
+            <div class="handwriting">"Xác chết số 7 vẫn còn thở..."</div>
+        </div>
+        
+        <!-- Thử thách 4 -->
+        <div class="challenge-card" onclick="selectChallenge(4, 'CRIMINALS')">
+            <div class="challenge-number">Ⅳ</div>
+            <div class="challenge-image" style="background-image: url('./images/068797c08425f733ba60784077f43428.jpg');"></div>
+            <div class="challenge-content">
+                <h2><span class="blood-text">CRIMINALS</span></h2>
+                <p class="description">Bốn bức tường này đã chứng kiến quá nhiều tội ác. Mỗi vật chứng là một mảnh ghép, mỗi dấu vết là một lời thú tội. Nhưng khi bạn tiến gần đến sự thật, bạn sẽ nhận ra mình không phải là thám tử - bạn là nghi can chính của vụ án chưa xảy ra.</p>
+                <p class="consequences">Hệ quả: Mỗi manh mối bạn tìm thấy sẽ xuất hiện trong nhà bạn ngày hôm sau.</p>
+            </div>
+            <div class="handwriting">"DNA trùng khớp với bạn..."</div>
+        </div>
+    </div>
+    
+    <!-- Âm thanh -->
+    <audio id="hoverSound" src="./sounds/scary-music-box-for-spooky-scenes-165983.mp3" preload="auto"></audio>
+    <audio id="backgroundSound" loop src="./sounds/music-box-scary-290198.mp3" preload="auto"></audio>
+    <audio id="selectSound" src="./sounds/scary-sound-effect-298866.mp3" preload="auto"></audio>
+    <audio id="screamSound" src="./sounds/scary-scream-193752.mp3" preload="auto"></audio>
+    
+    <script>
+        // Khởi tạo trạng thái người chơi
+        const playerState = {
+            choices: [],
+            consequences: {
+                timeLost: 0,
+                memoriesLost: 0,
+                scarsGained: 0,
+                evidenceFound: 0
+            },
+            sanity: 100
+        };
+        
+        // Phát âm thanh nền
+        document.addEventListener('DOMContentLoaded', function() {
+            const bgSound = document.getElementById('backgroundSound');
+            bgSound.volume = 0.2;
+            
+            // Thử phát âm thanh, bắt lỗi nếu trình duyệt chặn
+            const playPromise = bgSound.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Auto-play prevented: " + error);
+                    // Hiển thị nút play nếu cần
+                });
+            }
+            
+            // Thêm hiệu ứng âm thanh khi hover
+            const cards = document.querySelectorAll('.challenge-card');
+            const hoverSound = document.getElementById('hoverSound');
+            const screamSound = document.getElementById('screamSound');
+            
+            cards.forEach((card, index) => {
+                card.addEventListener('mouseenter', () => {
+                    hoverSound.currentTime = 0;
+                    hoverSound.volume = 0.1 + (index * 0.05);
+                    hoverSound.play();
+                    
+                    // 10% chance phát tiếng hét
+                    if (Math.random() < 0.1) {
+                        setTimeout(() => {
+                            screamSound.currentTime = 0;
+                            screamSound.volume = 0.3;
+                            screamSound.play();
+                        }, 500);
+                    }
+                });
+            });
+            
+            // Hiệu ứng nhấp nháy ngẫu nhiên
+            setInterval(() => {
+                if (Math.random() < 0.3) {
+                    document.querySelector('h1').style.animation = 'flicker 0.5s';
+                    setTimeout(() => {
+                        document.querySelector('h1').style.animation = 'flicker 3s infinite alternate';
+                    }, 500);
+                }
+            }, 10000);
+        });
+        
+        function returnToIndex() {
+            const clickSound = new Audio('https://example.com/door-creak.mp3');
+            clickSound.volume = 0.5;
+            clickSound.play();
+            
+            // Hiệu ứng chuyển trang
+            document.body.style.transition = 'all 1.5s';
+            document.body.style.opacity = '0';
+            document.body.style.filter = 'blur(5px)';
+            
+            // Lưu trạng thái người chơi vào localStorage
+            localStorage.setItem('escapeRoomPlayerState', JSON.stringify(playerState));
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+        
+        function selectChallenge(number, title) {
+            // Cập nhật trạng thái người chơi
+            playerState.choices.push({
+                challenge: number,
+                title: title,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Âm thanh khi chọn
+            const selectSound = document.getElementById('selectSound');
+            selectSound.currentTime = 0;
+            selectSound.volume = 0.7;
+            selectSound.play();
+            
+            // Hiệu ứng visual
+            const card = document.querySelector(`.challenge-card:nth-child(${number})`);
+            card.style.boxShadow = '0 0 30px #ff0000';
+            card.style.borderColor = '#ff0000';
+            
+            // Hiệu ứng chuyển trang
+            setTimeout(() => {
+                document.body.style.transition = 'all 1s';
+                document.body.style.backgroundColor = '#000';
+                document.body.style.opacity = '0';
+                
+                // Thêm hiệu ứng rùng rợn cuối cùng
+                if (Math.random() < 0.4) {
+                    const screamSound = document.getElementById('screamSound');
+                    screamSound.currentTime = 0;
+                    screamSound.volume = 0.5;
+                    screamSound.play();
+                }
+                
+                setTimeout(() => {
+                    // Lưu trạng thái và chuyển hướng
+                    localStorage.setItem('escapeRoomPlayerState', JSON.stringify(playerState));
+                    window.location.href = `challenge-${number}.html`;
+                }, 1000);
+            }, 500);
+        }
+        
+        // Theo dõi thời gian ở lại trang để ảnh hưởng đến độ "sanity"
+        let timeOnPage = 0;
+        setInterval(() => {
+            timeOnPage++;
+            playerState.sanity = Math.max(0, playerState.sanity - 0.1);
+            
+            // Mỗi phút tăng độ rùng rợn
+            if (timeOnPage % 60 === 0) {
+                increaseHorrorLevel();
+            }
+        }, 1000);
+        
+        function increaseHorrorLevel() {
+            // Tăng volume âm thanh nền
+            const bgSound = document.getElementById('backgroundSound');
+            bgSound.volume = Math.min(0.5, bgSound.volume + 0.05);
+            
+            // Thêm hiệu ứng visual
+            const bloodEffect = document.createElement('div');
+            bloodEffect.style.position = 'fixed';
+            bloodEffect.style.top = Math.random() * 100 + 'vh';
+            bloodEffect.style.left = Math.random() * 100 + 'vw';
+            bloodEffect.style.width = '100px';
+            bloodEffect.style.height = '100px';
+            bloodEffect.style.backgroundImage = 'url(https://example.com/blood-splatter.png)';
+            bloodEffect.style.backgroundSize = 'contain';
+            bloodEffect.style.backgroundRepeat = 'no-repeat';
+            bloodEffect.style.opacity = '0.7';
+            bloodEffect.style.pointerEvents = 'none';
+            bloodEffect.style.zIndex = '9999';
+            bloodEffect.style.animation = 'fadeOut 3s forwards';
+            
+            document.body.appendChild(bloodEffect);
+            
+            // Xóa sau khi hiệu ứng kết thúc
+            setTimeout(() => {
+                bloodEffect.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

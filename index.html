@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Sinh Nhật Chồng Yêu!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #e83e8c;
+            --secondary-color: #6f42c1;
+            --accent-color: #ffc107;
+            --text-color: #495057;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #f8f9fa 100%);
+            color: var(--text-color);
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            font-family: 'Dancing Script', cursive;
+            position: relative;
+            display: inline-block;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin: 30px 0;
+            position: relative;
+            padding: 30px;
+            background: rgba(248, 249, 250, 0.7);
+            border-radius: 15px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.05);
+            font-family: 'Playfair Display', serif;
+            text-align: left;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .message p {
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .message p::before {
+            content: '💖';
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1rem;
+        }
+
+        .couple-image {
+            width: 280px;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+            margin: 20px auto;
+        }
+
+        .couple-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 5px 15px rgba(111, 66, 193, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(111, 66, 193, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .audio-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .audio-control:hover {
+            transform: scale(1.1);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            opacity: 0;
+            font-size: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-top: 20px;
+        }
+
+        .date {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 15px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .message {
+                font-size: 1rem;
+                padding: 20px;
+            }
+            
+            .couple-image {
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        .fa-treasure-chest:before {
+            content: "\f593";
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="floating-hearts" id="hearts-container"></div>
+    
+    <div class="container animate__animated animate__fadeIn">
+        <img src="./images/hug-couple.gif" alt="Chúng ta" class="couple-image animate__animated animate__pulse animate__infinite animate__slower">
+        
+        <h1 class="animate__animated animate__bounceIn">Gửi bạn Cá Chép yêu dấu - aka chồng yêu Cá Rô<span style="color: var(--primary-color)">❤️</span></h1>
+        
+        <div class="message animate__animated animate__fadeInUp">
+            <p>Có thể anh không coi ngày hôm nay quá đặc biệt nhưng mà với em thì nó đặc biệt đáng nhớ, vì ngày này tồn tại nên em mới gặp được anh mà.</p>
+            
+            <p>Em không hẳn quá giỏi trong mảng này nhưng với hiện trạng não bộ như hiện tại, em nghĩ đây là ý tưởng ổn nhất em có thể nghĩ được để chúc mừng cho ngày chồng mình hiện thân trên Trái Đất này.</p>
+            
+            <p>Em không rõ anh sẽ thích điều gì, cũng không hẳn giỏi trong việc thể hiện cảm xúc để anh có thể cảm nhận được, bằng tất cả những gì em đã quan sát và suy nghĩ, em tạo ra món quà trước mặt baby đây vì mong em có thể gần anh thêm một xíu, em vẫn lo cho anh lắm nhưng vẫn là chưa biết cách làm tốt điều đó.</p>
+            
+            <p>Mong anh sau này sẽ thực hiện được những điều anh muốn, và em xin một chút ích kỉ, mong anh sẽ mở lòng với em hơn và ở cạnh em thật lâu hihi.</p>
+        </div>
+        
+        <button class="btn animate__animated animate__pulse animate__infinite animate__slower" onclick="startCelebration()">
+            <i class="fas fa-gift"></i> Mở Quà Nào!
+        </button>
+        <button class="btn animate__animated animate__pulse animate__infinite animate__slower" onclick="moKhobau()" style="background: linear-gradient(45deg, #ffc107, #fd7e14);">
+    <i class="fas fa-treasure-chest"></i> Rương Kho Báu
+</button>
+        <div class="signature">Vợ yêu của anh</div>
+        <div class="date">Ngày <span id="current-date"></span></div>
+    </div>
+
+    <!-- Audio control -->
+    <div class="audio-control" id="audioControl" onclick="toggleAudio()">
+        <i class="fas fa-music"></i>
+    </div>
+
+    <!-- Hidden audio element -->
+    <audio id="backgroundMusic" loop
+        <source src="./sounds/ItsAMoney_-_Until_I_Found_You_CeeNaija.com_.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function moKhobau() {
+            window.location.href = "khobau.html";
+        }
+        // Create floating hearts
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts-container');
+            const colors = ['#e83e8c', '#6f42c1', '#ffc107', '#20c997'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                
+                // Random properties
+                const size = Math.random() * 1 + 0.5;
+                const posX = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 3 + 3;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                heart.style.left = `${posX}%`;
+                heart.style.animationDelay = `${delay}s`;
+                heart.style.animationDuration = `${duration}s`;
+                heart.style.color = color;
+                heart.style.fontSize = `${size}rem`;
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        // Confetti celebration
+        function startCelebration() {
+            // Confetti effect
+            confetti({
+                particleCount: 200,
+                spread: 90,
+                origin: { y: 0.6 },
+                colors: ['#e83e8c', '#6f42c1', '#ffc107', '#20c997']
+            });
+            
+            // Heart explosion
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    spread: 100,
+                    origin: { y: 0.5 },
+                    shapes: ['heart'],
+                    colors: ['#e83e8c', '#6f42c1']
+                });
+            }, 300);
+            
+            // Redirect after animation
+            setTimeout(() => {
+                window.location.href = 'challenges.html';
+            }, 2000);
+
+            function openTreasure() {
+    // Confetti effect với màu vàng cam phù hợp chủ đề kho báu
+    confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.6 },
+        colors: ['#ffc107', '#fd7e14', '#e83e8c']
+    });
+    
+    // Chuyển trang sau hiệu ứng
+    setTimeout(() => {
+        window.location.href = 'khobau.html';
+    }, 1000);
+}
+
+        }
+        
+        // Audio control
+        const audio = document.getElementById('backgroundMusic');
+        const audioControl = document.getElementById('audioControl');
+        let isPlaying = false;
+        
+        function toggleAudio() {
+            if (isPlaying) {
+                audio.pause();
+                audioControl.innerHTML = '<i class="fas fa-music"></i>';
+                audioControl.style.background = 'white';
+                audioControl.style.color = 'var(--primary-color)';
+            } else {
+                audio.play();
+                audioControl.innerHTML = '<i class="fas fa-pause"></i>';
+                audioControl.style.background = 'var(--primary-color)';
+                audioControl.style.color = 'white';
+            }
+            isPlaying = !isPlaying;
+        }
+        
+        // Set current date
+        function setCurrentDate() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('vi-VN', options);
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            createHearts();
+            setCurrentDate();
+            
+            // Animate elements sequentially
+            const elements = document.querySelectorAll('.animate__animated');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.2}s`;
+            });
+            
+            // Try to autoplay music (may not work due to browser policies)
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    isPlaying = true;
+                    audioControl.innerHTML = '<i class="fas fa-pause"></i>';
+                    audioControl.style.background = 'var(--primary-color)';
+                    audioControl.style.color = 'white';
+                })
+                .catch(error => {
+                    isPlaying = false;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

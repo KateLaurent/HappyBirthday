@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÁI MUỘI BÍ ẨN | Thẩm Tra Tâm Lý Học</title>
+    
+    <style>
+        :root {
+            --main-pink: #ff2d70;
+            --dark-bg: #0f0c24;
+            --card-bg: rgba(25, 20, 60, 0.8);
+            --text-light: #f0e6ff;
+            --text-grey: #c2b5e3;
+            --accent-purple: #9c27b0;
+            --correct: #4caf50;
+            --wrong: #f44336;
+            --tab-active: #4a1d96;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Roboto:wght@400;500&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            background-image: 
+                linear-gradient(135deg, #0f0c24 0%, #330867 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--main-pink);
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 45, 112, 0.6);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-style: italic;
+            color: var(--text-grey);
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .subtitle::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--main-pink), transparent);
+        }
+
+        /* Tab System */
+        .tab-system {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 45, 112, 0.2);
+        }
+
+        .tab-header {
+            display: flex;
+            background: rgba(30, 20, 70, 0.8);
+            border-bottom: 1px solid rgba(255, 45, 112, 0.3);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tab-header::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            padding: 15px 25px;
+            background: transparent;
+            color: var(--text-grey);
+            border: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            white-space: nowrap;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-light);
+            background: rgba(255, 45, 112, 0.1);
+        }
+
+        .tab-btn.active {
+            color: white;
+            background: var(--tab-active);
+            font-weight: bold;
+        }
+
+        .tab-btn.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--main-pink);
+            box-shadow: 0 0 10px var(--main-pink);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Case Content */
+        .case-title {
+            color: var(--main-pink);
+            font-family: 'Playfair Display', serif;
+            font-size: 2em;
+            margin-top: 0;
+            border-bottom: 1px dashed rgba(255, 45, 112, 0.5);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .case-content {
+            margin-bottom: 25px;
+            position: relative;
+            font-size: 1.05em;
+            line-height: 1.8;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--main-pink);
+        }
+
+        .case-content p {
+            margin: 0 0 15px 0;
+        }
+
+        .case-content strong {
+            color: var(--main-pink);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .option {
+            background: rgba(50, 40, 90, 0.7);
+            padding: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            font-size: 1em;
+        }
+
+        .option::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .option:hover {
+            background: rgba(70, 60, 110, 0.7);
+            border-color: var(--main-pink);
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option.selected {
+            background: var(--main-pink);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 45, 112, 0.5);
+            border-color: transparent;
+        }
+
+        .option.correct {
+            background: var(--correct);
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+        }
+
+        .option.wrong {
+            background: var(--wrong);
+            box-shadow: 0 0 20px rgba(244, 67, 54, 0.5);
+        }
+
+        .verdict {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(30, 20, 70, 0.8);
+            border-radius: 10px;
+            animation: fadeIn 0.6s;
+            border: 1px solid var(--accent-purple);
+            backdrop-filter: blur(5px);
+        }
+
+        .verdict-title {
+            color: var(--accent-purple);
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-family: 'Playfair Display', serif;
+            display: flex;
+            align-items: center;
+        }
+
+        .verdict-title::before {
+            content: "✧";
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+
+        .verdict-content {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .psych-note {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-style: italic;
+            position: relative;
+            border-left: 4px solid;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .correct-note {
+            border-left-color: var(--correct);
+            color: #d4edda;
+        }
+
+        .wrong-note {
+            border-left-color: var(--wrong);
+            color: #f8d7da;
+        }
+
+        .psych-note::before {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-weight: bold;
+        }
+
+        .treasure-button {
+            display: none;
+            background: linear-gradient(45deg, var(--main-pink), var(--accent-purple));
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.4em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 30px auto;
+            transition: all 0.4s;
+            box-shadow: 0 5px 20px rgba(255, 45, 112, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: bold;
+            font-family: 'Playfair Display', serif;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .treasure-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+
+        .treasure-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 45, 112, 0.7);
+        }
+
+        .treasure-button:hover::before {
+            left: 100%;
+        }
+
+        .progress-container {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 10px auto;
+            width: 80%;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--main-pink), var(--accent-purple));
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .progress-text {
+            color: var(--text-grey);
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        /* Character Grid */
+        .character-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .character-card {
+            background: rgba(60, 45, 110, 0.5);
+            border-radius: 12px;
+            padding: 15px;
+            width: 140px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 45, 112, 0.3);
+            transition: all 0.4s;
+            backdrop-filter: blur(5px);
+        }
+
+        .character-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(255, 45, 112, 0.3);
+            border-color: var(--main-pink);
+        }
+
+        .character-name {
+            font-weight: bold;
+            color: var(--main-pink);
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .character-desc {
+            font-size: 0.85em;
+            color: var(--text-grey);
+            line-height: 1.4;
+        }
+
+        /* Music Control */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--main-pink);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(255, 45, 112, 0.6);
+            transition: all 0.3s;
+            font-size: 1.5em;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 0 25px rgba(255, 45, 112, 0.8);
+        }
+
+        /* Effects */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--main-pink);
+            opacity: 0;
+            z-index: 999;
+            animation: confetti 3s ease-out;
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+                margin-top: 15px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .tab-btn {
+                padding: 12px 15px;
+                font-size: 0.9em;
+                min-width: 100px;
+            }
+            
+            .tab-content {
+                padding: 20px 15px;
+            }
+            
+            .case-title {
+                font-size: 1.5em;
+            }
+            
+            .character-card {
+                width: 120px;
+                padding: 10px;
+            }
+        }
+         /* CSS cho nút quay lại */
+        .back-to-challenges {
+            position: fixed; /* Sử dụng fixed để cố định vị trí */
+            top: 20px; /* Cách top 20px */
+            left: 20px; /* Cách trái 20px */
+            padding: 10px 20px; /* Giảm padding cho gọn */
+            background: linear-gradient(135deg, var(--accent-purple), var(--main-pink));
+            color: var(--text-light);
+            border: none;
+            border-radius: 30px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            font-size: 14px; /* Giảm kích thước font */
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000; /* Đảm bảo nút luôn hiển thị trên cùng */
+        }
+
+        .back-to-challenges:hover {
+            transform: translateY(-2px); /* Giảm hiệu ứng hover */
+            box-shadow: 0 6px 20px rgba(156, 39, 176, 0.6);
+            background: linear-gradient(135deg, var(--main-pink), var(--accent-purple));
+        }
+
+        .back-to-challenges:active {
+            transform: translateY(1px);
+        }
+
+        .back-to-challenges::before {
+            content: "←";
+            font-size: 16px;
+            transition: transform 0.3s;
+        }
+
+        .back-to-challenges:hover::before {
+            transform: translateX(-3px);
+        }
+    </style>
+</head>
+<body>
+    <button onclick="window.location.href='challenges.html'" class="back-to-challenges">
+        Lãnh Địa Thử Thách
+    </button>
+
+    <script>
+        // Thêm hiệu ứng phát sáng ngẫu nhiên
+        const backBtn = document.querySelector('.back-to-challenges');
+        
+        setInterval(() => {
+            if(Math.random() > 0.8) {
+                backBtn.style.boxShadow = `0 0 12px 4px ${Math.random() > 0.5 ? 'var(--main-pink)' : 'var(--accent-purple)'}`;
+                setTimeout(() => {
+                    backBtn.style.boxShadow = '0 6px 20px rgba(156, 39, 176, 0.6)';
+                }, 300);
+            }
+        }, 3000);
+    </script>
+    <audio id="bgMusic" loop>
+        <source src="sounds/black-rose-dark-gothic-elegance-365146.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ audio.
+    </audio>
+    <button class="music-control" onclick="toggleMusic()">♫</button>
+    
+
+<style>
+.bloody-back-button {
+  padding: 12px 25px;
+  background: linear-gradient(to right, #4a0000, #6a0000);
+  color: #ffcccc;
+  border: 1px solid #ff0000;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  cursor: pointer;
+  text-shadow: 0 0 3px #ff0000;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.bloody-back-button:hover {
+  background: linear-gradient(to right, #6a0000, #8a0000);
+  text-shadow: 0 0 5px #ff0000;
+  box-shadow: 0 0 10px #ff000066;
+}
+
+.bloody-back-button:before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: radial-gradient(circle, #ff000033 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.bloody-back-button:hover:before {
+  opacity: 1;
+}
+
+.blood-drop {
+  margin-right: 8px;
+  animation: drip 2s infinite;
+}
+
+/* CSS cho container chính */
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* CSS cho nút quay lại */
+        .footer-container {
+            margin-top: auto; /* Đẩy xuống dưới cùng */
+            display: flex;
+            justify-content: center; /* Căn giữa theo chiều ngang */
+            padding: 20px 0;
+            width: 100%;
+        }
+
+        .back-to-challenges {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--main-pink));
+            color: var(--text-light);
+            border: none;
+            border-radius: 30px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .back-to-challenges:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(156, 39, 176, 0.6);
+            background: linear-gradient(135deg, var(--main-pink), var(--accent-purple));
+        }
+
+        .back-to-challenges:active {
+            transform: translateY(1px);
+        }
+
+        .back-to-challenges::before {
+            content: "←";
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .back-to-challenges:hover::before {
+            transform: translateX(-3px);
+        }
+
+@keyframes drip {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+</style>
+
+    <div class="container">
+        <header>
+            
+            <h1>ÁI MUỘI BÍ ẨN</h1>
+            <p class="subtitle">Giải mã những vụ drama tâm lý đầy quyến rũ</p>
+            
+            <div class="character-grid">
+                <div class="character-card">
+                    <div class="character-name">Đinh Đạt</div>
+                    <div class="character-desc">"Bông tuyết" cái tôi cao, hay nạt cá chép</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">Lý Linh</div>
+                    <div class="character-desc">Cụ gia tộc có bồ, "siêu răm" đình đám</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">Na</div>
+                    <div class="character-desc">Cute nhưng là "bậc thầy thả bait"</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">An</div>
+                    <div class="character-desc">Triết gia ẩn dật, thích phân tích tâm lý</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">Zach</div>
+                    <div class="character-desc">"Khổ răm" nhất họ nhưng cute ngầm</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">Nhật Hà</div>
+                    <div class="character-desc">Nàng cao 1m71 đầy ấn tượng</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">Lý Thông</div>
+                    <div class="character-desc">Alpha male cổ đại, đào hoa nhưng độc đoán</div>
+                </div>
+                <div class="character-card">
+                    <div class="character-name">Hải Hà</div>
+                    <div class="character-desc">Anh chồng có "harem" đông nhất dàn</div>
+                </div>
+            </div>
+            
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-text" id="progressText">Tiến độ: 0/6 tình huống</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="tab-system">
+            <div class="tab-header">
+                <button class="tab-btn active" onclick="openTab(event, 'case1')">Đa cấp trá hình</button>
+                <button class="tab-btn" onclick="openTab(event, 'case2')">Tin nhắn 2h sáng</button>
+                <button class="tab-btn" onclick="openTab(event, 'case3')">Bài post tố cáo</button>
+                <button class="tab-btn" onclick="openTab(event, 'case4')">Hoa hồng đen</button>
+                <button class="tab-btn" onclick="openTab(event, 'case5')">Bữa tối chấn động</button>
+                <button class="tab-btn" onclick="openTab(event, 'case6')">Bí mật cuối cùng</button>
+            </div>
+            
+            <!-- CASE 1 -->
+            <div id="case1" class="tab-content active">
+                <h2 class="case-title">TÌNH HUỐNG 1: SỰ TAN RÃ CỦA GIA TỘC</h2>
+                <div class="case-content">
+                    Sau khi Cá Chép rời gia tộc nhà họ Lý, trong gia tộc nở rộ lên nạn đa cấp.
+                    Câu hỏi: Ai là người chủ mưu?
+                </div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(1, 1, true)">1. Đinh Đạt</div>
+                    <div class="option" onclick="checkAnswer(1, 2, false)">2. Lý Linh</div>
+                    <div class="option" onclick="checkAnswer(1, 3, false)">3. Na</div>
+                    <div class="option" onclick="checkAnswer(1, 4, false)">4. Zach</div>
+                </div>
+                <div class="verdict" id="verdict1">
+                    <div class="verdict-title">KẾT LUẬN TÂM LÝ</div>
+                    <div class="verdict-content">
+                        <p>Đinh Đạt đã không còn duy trì trạng thái cũ, giờ đây anh ấy có mong muốn trở thành người có quyền lực và được người khác thấu hiểu hơn.</p>
+                        <p>Đáp án đúng: <strong>1. Đinh Đạt</strong></p>
+                    </div>
+                    <div class="psych-note correct-note" id="correctNote1" style="display:none">
+                        "Cái này quá dễ với chồng em!"
+                    </div>
+                    <div class="psych-note wrong-note" id="wrongNote1" style="display:none">
+                        "Amen, nay anh hiền z anh."
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CASE 2 -->
+            <div id="case2" class="tab-content">
+                <h2 class="case-title">TÌNH HUỐNG 2: BÍ MẬT TIN NHẮN LÚC 2H SÁNG</h2>
+                <div class="case-content">
+                    <p>Hải Hà nhận được tin nhắn từ số lạ: "Anh là người đàn ông em luôn mơ ước". Cùng lúc, Cá Chép cũng nhận tin tương tự từ số khác. Khi đối chất, Lý Thông thừa nhận đã nhắn cho Hải Hà, nhưng không phải người nhắn cho Cá Chép.</p>
+                    <p>Điều tra sâu phát hiện cả hai tin nhắn đều được gửi từ cùng một thiết bị.</p>
+                    <p><strong>Câu hỏi:</strong> Ai là người đứng sau màn kịch này?</p>
+                </div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(2, 1, false)">1. Lý Thông dùng 2 số để thử lòng cả hai</div>
+                    <div class="option" onclick="checkAnswer(2, 2, true)">2. Na mượn điện thoại Lý Thông để nhắn</div>
+                    <div class="option" onclick="checkAnswer(2, 3, false)">3. An đang làm thí nghiệm tâm lý tình yêu</div>
+                    <div class="option" onclick="checkAnswer(2, 4, false)">4. Zach hack được tài khoản của Lý Thông</div>
+                </div>
+                <div class="verdict" id="verdict2">
+                    <div class="verdict-title">KẾT LUẬN TÂM LÝ</div>
+                    <div class="verdict-content">
+                        <p>Log điện thoại cho thấy Na đã mượn điện thoại Lý Thông lúc 1h30. Cô dùng SIM phụ để nhắn cho Cá Chép. Mục đích: Tại Na chán nên muốn làm content thôi à :33.</p>
+                        <p>Đáp án đúng: <strong>2. Na mượn điện thoại Lý Thông để nhắn</strong> - Một vụ thả bait đẳng cấp!</p>
+                    </div>
+                    <div class="psych-note correct-note" id="correctNote2" style="display:none">
+                        "Phân tích xuất sắc! Chồng em đoán đỉnh thế, em làm đại chứ không rõ lắm. :33"
+                    </div>
+                    <div class="psych-note wrong-note" id="wrongNote2" style="display:none">
+                        "Tại sao anh lại đoán sai huhu, em cũng thế hihi :33"
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CASE 3 -->
+            <div id="case3" class="tab-content">
+                <h2 class="case-title">TÌNH HUỐNG 3: BÀI POST TỐ CÁO ẨN DANH</h2>
+                <div class="case-content">
+                    <p>Một bài viết nặc danh trên group kín tố Lý Linh ngoại tình với cả Zach và Đinh Đạt. Bài đăng vào lúc 3h sáng khi hầu hết mọi người đang ngủ. Lý Thông khẳng định anh thấy Đinh Đạt còn thức lúc đó.</p>
+                    <p>Khi kiểm tra, Đinh Đạt có alibi vững chắc - anh đang livestream game cả đêm.</p>
+                    <p><strong>Câu hỏi:</strong> Ai thực sự đứng sau bài viết này?</p>
+                </div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(3, 1, false)">1. Zach viết để trả thù Lý Linh</div>
+                    <div class="option" onclick="checkAnswer(3, 2, true)">2. Lý Thông dùng máy tính quán net</div>
+                    <div class="option" onclick="checkAnswer(3, 3, false)">3. Na muốn làm Lý Linh xấu mặt</div>
+                    <div class="option" onclick="checkAnswer(3, 4, false)">4. Hải Hà tự đăng để gây chú ý</div>
+                </div>
+                <div class="verdict" id="verdict3">
+                    <div class="verdict-title">KẾT LUẬN TÂM LÝ</div>
+                    <div class="verdict-content">
+                        <p>IP bài viết trùng với quán net gần nhà Lý Thông. Chủ quán xác nhận anh thường đến đó đêm khuya. Động cơ: Ghen tức khi thấy Lý Linh thân thiết với Zach.</p>
+                        <p>Đáp án đúng: <strong>2. Lý Thông dùng máy tính quán net</strong> - Một vụ ghen tuông mù quáng!</p>
+                    </div>
+                    <div class="psych-note correct-note" id="correctNote3" style="display:none">
+                        "Tuyệt vời! Anh đã hiểu được tính cách ghen tuông thái quá của Lý Thông. Anh ta luôn tìm cách kiểm soát người khác bằng những hành động tiêu cực."
+                    </div>
+                    <div class="psych-note wrong-note" id="wrongNote3" style="display:none">
+                        "Sai rồi! Anh đã đánh giá thấp sự ghen tuông của Lý Thông. Kiểu đàn ông alpha male thường hành động tiêu cực khi cảm thấy bị đe dọa."
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CASE 4 -->
+            <div id="case4" class="tab-content">
+                <h2 class="case-title">TÌNH HUỐNG 4: VỤ ÁN HOA HỒNG ĐEN</h2>
+                <div class="case-content">
+                    <p>Nhật Hà nhận được bó hoa hồng đen kèm lời nhắn: "Hãy rời xa anh ta nếu không muốn ân hận". Cùng ngày, Hải Hà cũng nhận được bó hoa tương tự với nội dung: "Cô không xứng với anh".</p>
+                    <p>Khi điều tra, phát hiện thẻ tín dụng mua hoa trùng với thẻ của An, nhưng anh khẳng định không liên quan.</p>
+                    <p><strong>Câu hỏi:</strong> Ai thực sự gửi những bó hoa đe dọa này?</p>
+                </div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(4, 1, false)">1. An tự gửi để "thử nghiệm" cảm xúc</div>
+                    <div class="option" onclick="checkAnswer(4, 2, true)">2. Zach mượn thẻ của An để mua</div>
+                    <div class="option" onclick="checkAnswer(4, 3, false)">3. Đinh Đạt thuê người gửi</div>
+                    <div class="option" onclick="checkAnswer(4, 4, false)">4. Lý Linh muốn dọa Nhật Hà</div>
+                </div>
+                <div class="verdict" id="verdict4">
+                    <div class="verdict-title">KẾT LUẬN TÂM LÝ</div>
+                    <div class="verdict-content">
+                        <p>Camera cửa hàng hoa ghi hình Zach dùng thẻ của An. Cô thừa nhận muốn tạo drama để Hải Hà chú ý đến mình. An hoàn toàn không hay biết.</p>
+                        <p>Đáp án đúng: <strong>2. Zach mượn thẻ của An để mua</strong> - Một vụ lừa đảo tinh vi!</p>
+                    </div>
+                    <div class="psych-note correct-note" id="correctNote4" style="display:none">
+                        "Chính xác! Anh đã nhìn thấu được thủ đoạn của Zach. Zach rất giỏi trong việc dùng người khác để đạt mục đích cá nhân."
+                    </div>
+                    <div class="psych-note wrong-note" id="wrongNote4" style="display:none">
+                        "Không đúng! Anh đã đánh giá quá cao An. Zach mới là người giỏi hành động."
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CASE 5 -->
+            <div id="case5" class="tab-content">
+                <h2 class="case-title">TÌNH HUỐNG 5: BỮA TỐI THỔ LỘ CHẤN ĐỘNG</h2>
+                <div class="case-content">
+                    <p>Tại bữa tối, Zach bất ngờ tuyên bố: "Tôi biết tất cả bí mật của mọi người". An cười khẩy: "Cậu chỉ đang cố gây chú ý". Bỗng điện thoại của Nhật Hà nhận được file âm thanh ghi lại cuộc nói chuyện riêng giữa cô và Hải Hà.</p>
+                    <p><strong>Câu hỏi:</strong> Ai thực sự đứng sau vụ rò rỉ này?</p>
+                </div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(5, 1, false)">1. Zach đã hack điện thoại Nhật Hà</div>
+                    <div class="option" onclick="checkAnswer(5, 2, false)">2. Lý Thông thuê hacker nghe lén</div>
+                    <div class="option" onclick="checkAnswer(5, 3, true)">3. Na cài phần mềm gián điệp từ lâu</div>
+                    <div class="option" onclick="checkAnswer(5, 4, false)">4. Đinh Đạt muốn làm Nhật Hà xấu hổ</div>
+                </div>
+                <div class="verdict" id="verdict5">
+                    <div class="verdict-title">KẾT LUẬN TÂM LÝ</div>
+                    <div class="verdict-content">
+                        <p>Kiểm tra điện thoại Nhật Hà phát hiện phần mềm gián điệp được cài từ 3 tháng trước, đúng lúc cô cho Na mượn điện thoại. Na thừa nhận đã thu thập thông tin để "phòng thân".</p>
+                        <p>Đáp án đúng: <strong>3. Na cài phần mềm gián điệp từ lâu</strong> - Một vụ theo dõi có hệ thống!</p>
+                    </div>
+                    <div class="psych-note correct-note" id="correctNote5" style="display:none">
+                        "Xuất sắc! Anh đã hiểu được tính cách thích kiểm soát của Na. Na luôn có xu hướng thu thập thông tin để đảm bảo an toàn cho mình."
+                    </div>
+                    <div class="psych-note wrong-note" id="wrongNote5" style="display:none">
+                        "Chưa chính xác! Anh đã bỏ qua thói quen 'thu thập thông tin' Na rất giỏi trong việc cài cắm các công cụ gián điệp từ trước."
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CASE 6 -->
+            <div id="case6" class="tab-content">
+                <h2 class="case-title">TÌNH HUỐNG 6: BÍ MẬT CUỐI CÙNG</h2>
+                <div class="case-content">
+                    <p>Sau tất cả drama, An đột ngột đăng một bài phân tích dài về tâm lý của từng thành viên, tiết lộ:</p>
+                    <ul>
+                        <li>Đinh Đạt có phức cảm tự ti và luôn muốn chứng tỏ</li>
+                        <li>Na mắc chứng "thiếu tình thương" từ nhỏ</li>
+                        <li>Lý Thông có dấu hiệu rối loạn kiểm soát</li>
+                    </ul>
+                    <p><strong>Câu hỏi:</strong> Động cơ thực sự của An là gì?</p>
+                </div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(6, 1, false)">1. An muốn giúp mọi người hiểu nhau hơn</div>
+                    <div class="option" onclick="checkAnswer(6, 2, false)">2. Đây là nghiên cứu tâm lý học của anh</div>
+                    <div class="option" onclick="checkAnswer(6, 3, true)">3. An đang trả thù vì bị lợi dụng</div>
+                    <div class="option" onclick="checkAnswer(6, 4, false)">4. Bài viết bị hack và chỉnh sửa</div>
+                </div>
+                <div class="verdict" id="verdict6">
+                    <div class="verdict-title">KẾT LUẬN TÂM LÝ</div>
+                    <div class="verdict-content">
+                        <p>Nhật ký của An tiết lộ anh biết mình bị Na lợi dụng, Lý Thông coi thường, và Đinh Đạt luôn chê bai. Bài viết là cách anh "trừng phạt" họ bằng chính chuyên môn tâm lý của mình.</p>
+                        <p>Đáp án đúng: <strong>3. An đang trả thù vì bị lợi dụng</strong> - Một cú twist đầy tính toán!</p>
+                    </div>
+                    <div class="psych-note correct-note" id="correctNote6" style="display:none">
+                        "Phân tích tâm lý tuyệt vời! Anh đã nhìn thấu được sự phức tạp trong tính cách của An. Người thông minh nhất cũng có lúc bị cảm xúc chi phối."
+                    </div>
+                    <div class="psych-note wrong-note" id="wrongNote6" style="display:none">
+                        "Chưa chính xác! Anh đã đánh giá thấp sự tổn thương của An. Ngay cả một nhà triết học cũng có lúc hành động theo cảm xúc cá nhân."
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="treasure-button" id="treasureButton" onclick="goToTreasure()">MỞ KHO BÁU TỐI THƯỢNG</button>
+    </div>
+    
+    <footer>
+        <p>© Love you, babe!</p>
+    </footer>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        let completedCases = 0;
+        
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                document.querySelector('.music-control').innerHTML = '♫<span style="font-size:0.5em;position:absolute;bottom:5px;">ON</span>';
+            } else {
+                music.pause();
+                document.querySelector('.music-control').innerHTML = '🔇<span style="font-size:0.5em;position:absolute;bottom:5px;">OFF</span>';
+            }
+        }
+        
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        function checkAnswer(caseId, optionNum, isCorrect) {
+            const caseElement = document.getElementById(`case${caseId}`);
+            const options = caseElement.querySelectorAll('.option');
+            const verdict = document.getElementById(`verdict${caseId}`);
+            const correctNote = document.getElementById(`correctNote${caseId}`);
+            const wrongNote = document.getElementById(`wrongNote${caseId}`);
+            
+            // Đánh dấu option được chọn
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'wrong');
+            });
+            
+            if (isCorrect) {
+                options[optionNum - 1].classList.add('correct');
+                correctNote.style.display = 'block';
+                wrongNote.style.display = 'none';
+            } else {
+                options[optionNum - 1].classList.add('wrong');
+                
+                // Đánh dấu đáp án đúng
+                options.forEach((opt, idx) => {
+                    if (opt.onclick.toString().includes('true)')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                
+                correctNote.style.display = 'none';
+                wrongNote.style.display = 'block';
+            }
+            
+            // Hiển thị kết luận
+            verdict.style.display = 'block';
+            
+            // Kiểm tra tiến độ
+            if (!caseElement.dataset.completed) {
+                caseElement.dataset.completed = 'true';
+                completedCases++;
+                updateProgress();
+                
+                // Nếu hoàn thành tất cả
+                if (completedCases === 6) {
+                    document.getElementById('treasureButton').style.display = 'block';
+                    createConfetti();
+                }
+            }
+        }
+        
+        function updateProgress() {
+            const progressText = document.getElementById('progressText');
+            const progressFill = document.getElementById('progressFill');
+            
+            progressText.textContent = `Tiến độ: ${completedCases}/6 tình huống`;
+            progressFill.style.width = `${(completedCases / 6) * 100}%`;
+        }
+        
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+        
+        function goToTreasure() {
+            // Thay đổi link này thành trang kho báu của bạn
+            window.location.href = 'treasure.html';
+        }
+        
+        // Tự động phát nhạc khi có tương tác
+        document.addEventListener('click', function initMusic() {
+            music.volume = 0.3;
+            music.play().catch(e => console.log('Auto-play prevented'));
+            document.removeEventListener('click', initMusic);
+        }, { once: true });
+        
+        // Hiệu ứng gõ chữ cho case đầu tiên
+        function typeWriterEffect() {
+            const caseContent = document.querySelector('.case-content');
+            const text = caseContent.innerHTML;
+            caseContent.innerHTML = '';
+            
+            let i = 0;
+            function typing() {
+                if (i < text.length) {
+                    caseContent.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typing, Math.random() * 10);
+                }
+            }
+            
+            typing();
+        }
+        
+        // Kích hoạt hiệu ứng gõ chữ khi trang load
+        window.addEventListener('load', typeWriterEffect);
+    </script>
+    
+</body>
+</html>
